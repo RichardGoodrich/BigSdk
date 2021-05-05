@@ -32,8 +32,19 @@ root_dir = ''
 src_dir = ''
 # </editor-fold>
 
+# <editor-fold desc="screen config"
+screen_width = 0
+screen_height = 0
+screen_depth = 0
+# </editor-fold>
 
+# <editor-fold desc="StepMode signals"
+StepMode = namedtuple('StepMode', ['every_step', 'major_step', 'no_step'])
+steps = StepMode(every_step="Every Step", major_step="Major Step", no_step="No Step")
+step = steps.no_step
+# </editor-fold>
 
+# <editor-fold desc="Call Back signaling to GUI (passing cb)"
 GuiCmd = namedtuple('GuiCmd', ['wait', 'color', 'lift', 'grid',
                                'restoreColors',
                                'displayNumbers'
@@ -42,14 +53,6 @@ gui_cmd = GuiCmd(wait='wait', color='color', lift='lift', grid='grid',
                  restoreColors='restoreColors',
                  displayNumbers='displayNumbers')
 
-screen_width = 0
-screen_height = 0
-screen_depth = 0
-
-StepMode = namedtuple('StepMode', ['every_step', 'major_step', 'no_step'])
-steps = StepMode(every_step="Every Step", major_step="Major Step", no_step="No Step")
-step = steps.no_step
-
 class GuiCmd:
     cmd = gui_cmd.wait
     cell = ''
@@ -57,6 +60,8 @@ class GuiCmd:
     grid_index = 0
     square = ''
     tag = ''
+# </editor-fold>
+
 
 # <editor-fold desc="Alphabetical Listing"
 '''
