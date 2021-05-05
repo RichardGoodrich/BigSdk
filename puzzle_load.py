@@ -12,7 +12,6 @@ import sys
 import cmds
 from codec import Codec
 import dancing_links
-import main
 import settings as g
 import signals as sigs
 # </editor-fold>
@@ -29,14 +28,18 @@ logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
 # <editor-fold desc="globals"
-BP = 0
+BP = g.BREAK_POINT
+SET = g.OP_SET
+
+PUZZLE_DEFAULT =\
+'.....627........5....54..311.....5..97.8.2.64..6.....764..29....8........526.....'
 # </editor-fold>
 
 codec = Codec()
 encoded_puzzle = ''
 solved_puzzle = ''
 
-def load(x, puz=g.PUZZLE_DEFAULT):
+def load(cb, puz=PUZZLE_DEFAULT):
     try:
         global codec
         global encoded_puzzle
@@ -61,13 +64,13 @@ def load(x, puz=g.PUZZLE_DEFAULT):
         if '.' in solved_puzzle:
             return False
 
-        do_puzzle(x, puzzle_list)
+        do_puzzle(cb, puzzle_list)
 
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
 
-def do_puzzle(x, puz_list):
+def do_puzzle(cb, puz_list):
     try:
         puzValue = get_puz_value(puz_list)
         while True:
@@ -75,15 +78,15 @@ def do_puzzle(x, puz_list):
                 step = sigs.step
 
                 cmd = next(puzValue)
-                cmds.big_cmd_load(x, cmd)
+                cmds.big_cmd_load(cb, cmd)
 
                 if sigs.step != sigs.steps.no_step:
                     sigs.GuiCmd.cmd = sigs.gui_cmd.wait
-                    x()
+                    cb()
 
             except Exception as e:
                 sigs.GuiCmd.cmd = sigs.gui_cmd.displayNumbers
-                x()
+                cb()
 
                 # sigs.is_load(False)
                 return
@@ -97,7 +100,7 @@ def get_puz_value(puz_list):
         for i, value in enumerate(puz_list):
             square = g.SQUARES[i]
             if value != '.':
-                cmd = 'r' + square[0] + 'c' + square[1] + g.SET + 'n' + value
+                cmd = 'r' + square[0] + 'c' + square[1] + SET + 'n' + value
                 yield cmd
     except Exception as e:
         logger_except.exception(e)
@@ -144,8 +147,10 @@ def filter_puzzle(puz_list):
         logger_except.exception(e)
         sys.exit()
 
-if __name__ == '__main__':
-    pass
-else:
-    print('importing puzzle_load.py')
 
+if __name__ == '__main__':
+    file = __file__
+    print(f'running {file} ')
+else:
+    file = __file__
+    print(f'importing {file} ')

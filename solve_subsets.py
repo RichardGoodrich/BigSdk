@@ -1,9 +1,6 @@
 '''
 solve_subsets.py  2021-05-04 Tue
 
-/home/Big/Dropbox/root/private/computer/software
-/PyCharm/Big'sSudoku/play/src/solve_subsets.py
-
 '''
 
 # <editor-fold desc="python imports"
@@ -30,16 +27,14 @@ logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
 # <editor-fold desc="globals"
-BP = 0
-# </editor-fold>
+BP = g.BREAK_POINT
 
 LIMITS = {2: 3, 3: 5, 4: 6}
-
+# </editor-fold>
 
 def do():
     '''
     Finds Sudoku N2, N3, N4.
-
 
     :return:  True | False   sigs.big_cmd
     '''
@@ -56,7 +51,6 @@ def do():
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
-
 
 def do_n2():
     try:
@@ -87,17 +81,15 @@ def do_n3():
 def do_n4():
     try:
         for grid_index in range(g.NUMBER_OF_GRIDS):
-            if do_house(x, grid_index, 'x', 4):
+            if do_house(grid_index, 'x', 4):
                 return True
-            if do_house(x, grid_index, 'y', 4):
+            if do_house(grid_index, 'y', 4):
                 return True
             return False
 
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
-
-
 
 def do_house(grid_index, house_type, size):
     '''
@@ -134,7 +126,6 @@ def do_house(grid_index, house_type, size):
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
-
 
 def do_subset(members, size, grid, house):
     '''
@@ -192,8 +183,7 @@ def do_subset(members, size, grid, house):
         logger_except.exception(e)
         sys.exit()
 
-def can_do_set(grid_name, size, house,
-               members, indices, values):
+def can_do_set(grid_name, size, house, members, indices, values):
     try:
         line = members.copy()
         for index in indices:
@@ -226,6 +216,8 @@ def can_do_set(grid_name, size, house,
 
 
 if __name__ == '__main__':
-    pass
+    file = __file__
+    print(f'running {file} ')
 else:
-    print('solve_subsets.py is being imported')
+    file = __file__
+    print(f'importing {file} ')

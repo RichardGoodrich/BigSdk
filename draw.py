@@ -2823,3 +2823,10 @@ SMALL_TEXT_DATA = {
         {'state': 'hidden', 'tags': ('SN', 'SN_99', 'SN_99-2'), 'text': '2'},
         {'state': 'hidden', 'tags': ('SN', 'SN_99', 'SN_99-1'), 'text': '1'}),
  }
+
+if __name__ == '__main__':
+    file = __file__
+    print(f'running {file} ')
+else:
+    file = __file__
+    print(f'importing {file} ')

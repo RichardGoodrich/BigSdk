@@ -1,7 +1,5 @@
-#!/usr/bin/python3
-
 '''
-main.py 2021-05-05 Wed
+main.py is the GUI
 
 ref: ../notes/root.txt  for paths
 '''
@@ -20,10 +18,8 @@ import colors
 from grid import Grid
 import puzzle_load
 import signals as sigs
+import support as s
 import solve
-# </editor-fold>
-
-# <editor-fold desc="globals"
 # </editor-fold>
 
 # <editor-fold desc="logging setup"
@@ -37,10 +33,13 @@ file_handler_except.setFormatter(formatter_except)
 logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
+# <editor-fold desc="globals"
+
+# </editor-fold>
+
 def main():
     root = tk.Tk()
     gui_ref = gui(root)
-    print('gui loop')
     root.mainloop()
 
 def gui(root):
@@ -62,22 +61,22 @@ def gui(root):
 
     # <editor-fold desc="Grid Menu"
     def toggle_all():
-        pass
+        print('todo main.toggle_all')
 
     def toggle_bns():
-        pass
+        print('todo main.toggle_bns')
 
     def toggle_ncr():
-        pass
+        print('todo main.toggle_ncr')
 
     def toggle_rcn():
-        pass
+        print('todo main.toggle_rcn')
 
     def toggle_rnc():
-        pass
+        print('todo main.toggle_rnc')
 
     def toggle_spk():
-        pass
+        print('todo main.toggle_spk')
 
     grid_menu = tk.Menu(subMenu)
     grid_menu.add_command(label='rcn', command=toggle_rcn)
@@ -101,28 +100,28 @@ def gui(root):
 
     def load_puzzle():
         try:
-            sigs.is_load_set(True)
+            s.is_load_set(True)
 
             if sigs.step == sigs.steps.no_step:
                 menuBar['bg'] = colors.MENU_BAR_NORMAL
             else:
                 menuBar['bg'] = colors.MENU_BAR_ACTIVE
 
-            puzzle_load.load(x)
-            sigs.is_load_set(False)
+            puzzle_load.load(cb)
+            s.is_load_set(False)
         except Exception as e:
             logger_except.exception(e)
             sys.exit()
 
     def load_grids():
-        sigs.is_grid_set(True)
+        s.is_grid_set(True)
         print('todo - main.load_grids need routine')
-        sigs.is_grid_set(False)
+        s.is_grid_set(False)
 
     def load_81_char_strings():
-        sigs.is_load_set(True)
+        s.is_load_set(True)
         print('todo - main.load_81_char_strings need routine')
-        sigs.is_load_set(False)
+        s.is_load_set(False)
 
     puz_menu = tk.Menu(subMenu)
     puz_menu.add_command(label='Clear', command=clear_puzzle)
@@ -135,7 +134,7 @@ def gui(root):
     # <editor-fold desc="Solve Menu"
     def solve_all():
         try:
-            solve.all(x)
+            solve.all(cb)
         except Exception as e:
             print(e)
             sys.exit()
@@ -176,7 +175,7 @@ def gui(root):
 
     # <editor-fold desc="Entry Widget Setup"
     def entry_cmd():
-        pass
+        print('todo main.entry_cmd')
 
     entry_var = tk.StringVar()
 
@@ -245,30 +244,21 @@ def gui(root):
             logger_except.exception(e)
             sys.exit()
 
-    x = cmd_to_gui   # callback reference is this 'x' to keep typing to minimum!
-
+    cb = cmd_to_gui   # cb for call back
 
 def set_folders():
     try:
         sigs.src_dir = os.getcwd()
         sigs.root_dir = sigs.src_dir.replace('/src', '')
-        sigs.lo = os.path.join(sigs.root_dir, '/logs')
+        sigs.log_dir = os.path.join(sigs.root_dir, '/logs')
 
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
 
-
 if __name__ == '__main__':
+    file = __file__
+    print(f'running {file} ')
     main()
 
-''''
-Corey Schafer Sep 12, 2019
-Python Threading Tutorial: Run Code Concurrently 
-  Using the Threading Module
 
-15:25  importing concurrent futures  
-
-CS 16-mins in
-
-'''

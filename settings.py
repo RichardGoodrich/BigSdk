@@ -1,13 +1,25 @@
-from collections import namedtuple
+'''
+settings.py  2021-05-05  Wed  Major Refactor
+
+usage:
+    import settings as g
+'''
+
+# <editor-fold desc="python imports"
+'''
+Python Dictionaries Are Now Ordered. Keep Using OrderedDict.
+
+March 10, 2018 by Greg Gandenberger
+https://gandenberger.org/2018/03/10/ordered-dicts-vs-ordereddict/
+https://gandenberger.org/
+
+keep for now to "show intent
+'''
+# from collections import namedtuple
 from collections import OrderedDict
+import os
+# </editor-fold>
 
-IS_DF = False
-IS_DF_FAIL = False
-IS_LOG_METHOD = False
-IS_RESIZEABLE = False
-
-PUZZLE_DEFAULT =\
-'.....627........5....54..311.....5..97.8.2.64..6.....764..29....8........526.....'
 
 
 BLK_SQR_ROWS = ['123', '456', '789']
@@ -61,62 +73,15 @@ COL_TO_SQRS = {
 ROW_TO_BLKS = BLK_TO_ROWS
 ROW_TO_SQRS = BLK_TO_COLS
 
-STEP_MODE_MODES = [
-    'every_step',
-    'major_step',
-    'no_step',
-]
-STEP_MODE_NAMES = [
-    'Every Step',
-    'Major Step',
-    'No Step',
-]
+BREAK_POINT = 0   # was BP
+NEW_LINE = '\n'   # was NL
+PERIOD   = '.'    # was P
+ZERO = '0'
+
+DIGITS = '123456789'
 
 
-# is_grid_cmd_msg = False  todo
-
-# <editor-fold desc="COLORS"
-
-COLOR_ASSERT = 'green'
-COLOR_REMOVE = 'red'
-
-COLOR_BKG = 'yellow'
-COLOR_CLR = 'red'
-COLOR_SET = 'green'
-
-COLOR_PAIR_1 = ['maroon1', 'orchid1']
-COLOR_PAIR_2 = ['DodgerBlue2', 'cyan']
-
-# todo replace list with items below it
-COLORS_LOAD_REMOVES = ['orange', 'cyan', 'red']
-
-COLOR_LOAD_REMOVE_BLOCK_ONLY = 'red'
-COLOR_LOAD_REMOVE_ROW_COl = 'orange'
-COLOR_LOAD_REMOVE_RCN_BLK = 'cyan'
-
-
-COLOR_TRANSPARENT = ''
-COLOR_BACKGROUND = 'white'
-
-COLOR_HIGHLIGHT = 'yellow'
-
-COLOR_BUTTON_FOCUS = 'yellow'
-COLOR_BUTTON_NO_FOCUS = COLOR_BACKGROUND
-
-COLOR_NUMBER_ENTERED = 'blue'
-COLOR_NUMBER_PUZZLE  = 'black'
-
-COLOR_OUTLINE_DISABLED = COLOR_BACKGROUND
-COLOR_OUTLINE_ENABLED = 'cyan'
-# </editor-fold>
-
-# <editor-fold desc="Grid Tags"
-BigNumberTag = "BN"
-BigSquareTag = "BS"
-SmallNumberTag = "SN"
-SmallSquareTag = "SS"
-# </editor-fold>
-
+# <editor-fold desc="Basic Grid"
 RCN = 'rcn'
 RNC = 'rnc'
 NCR = 'ncr'
@@ -127,200 +92,32 @@ NRC = 'nrc'
 NBS = 'nbs'
 CNR = 'cnr'
 
-ADD = '+'
-BP = 0
-EQUAL = '='
-SET = '='
-CLR = '-'
-LINK = ' + '
-INFER = ' > '
-P = '.'
-PS = '. '
-CS = ', '
-SP = ' '
-NL = '\n'
-
-
-BASIC_CMD_LENGTH = 7
-
-BOARD_GRID_DICT = {
-    0: 'rcn',
-    1: 0,
-    '01': '123456789', '02': '123456789', '03': '123456789',
-    '04': '123456789', '05': '123456789', '06': '123456789',
-    '07': '123456789', '08': '123456789', '09': '123456789',
-    '10': '123456789', '20': '123456789', '30': '123456789',
-    '40': '123456789', '50': '123456789', '60': '123456789',
-    '70': '123456789', '80': '123456789', '90': '123456789',
-    '11': '123456789', '12': '123456789', '13': '123456789',
-    '14': '123456789', '15': '123456789', '16': '123456789',
-    '17': '123456789', '18': '123456789', '19': '123456789',
-    '21': '123456789', '22': '123456789', '23': '123456789',
-    '24': '123456789', '25': '123456789', '26': '123456789',
-    '27': '123456789', '28': '123456789', '29': '123456789',
-    '31': '123456789', '32': '123456789', '33': '123456789',
-    '34': '123456789', '35': '123456789', '36': '123456789',
-    '37': '123456789', '38': '123456789', '39': '123456789',
-    '41': '123456789', '42': '123456789', '43': '123456789',
-    '44': '123456789', '45': '123456789', '46': '123456789',
-    '47': '123456789', '48': '123456789', '49': '123456789',
-    '51': '123456789', '52': '123456789', '53': '123456789',
-    '54': '123456789', '55': '123456789', '56': '123456789',
-    '57': '123456789', '58': '123456789', '59': '123456789',
-    '61': '123456789', '62': '123456789', '63': '123456789',
-    '64': '123456789', '65': '123456789', '66': '123456789',
-    '67': '123456789', '68': '123456789', '69': '123456789',
-    '71': '123456789', '72': '123456789', '73': '123456789',
-    '74': '123456789', '75': '123456789', '76': '123456789',
-    '77': '123456789', '78': '123456789', '79': '123456789',
-    '81': '123456789', '82': '123456789', '83': '123456789',
-    '84': '123456789', '85': '123456789', '86': '123456789',
-    '87': '123456789', '88': '123456789', '89': '123456789',
-    '91': '123456789', '92': '123456789', '93': '123456789',
-    '94': '123456789', '95': '123456789', '96': '123456789',
-    '97': '123456789', '98': '123456789', '99': '123456789',
-}
-
-
 GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
 GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
 GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+# </editor-fold>
 
+# <editor-fold desc="Tags for Grids"
+TAG_BIG_NUMBER = 'BN'    # was BigNumberTag
+TAG_BIG_SQUARE = 'BS'    # was BigSquareTag
+TAG_SMALL_NUMBER = 'BN'  # was SmallNumberTag
+TAG_SMALL_SQUARE = 'BS'  # was SmallSquareTag
+# </editor-fold>
+
+# <editor-fold desc="Lengths & Limits"
+BASIC_CMD_LENGTH = 7
+MAX_CELLS = 81
+MAX_DIGITS = len(DIGITS)
 NUMBER_OF_GRIDS = len(GRID_NAMES_1)
+# </editor-fold>
 
-RCN_DICT = {
-    0: 'rcn',
-    '11': '123456789', '12': '123456789', '13': '123456789',
-    '14': '123456789', '15': '123456789', '16': '123456789',
-    '17': '123456789', '18': '123456789', '19': '123456789',
-    '21': '123456789', '22': '123456789', '23': '123456789',
-    '24': '123456789', '25': '123456789', '26': '123456789',
-    '27': '123456789', '28': '123456789', '29': '123456789',
-    '31': '123456789', '32': '123456789', '33': '123456789',
-    '34': '123456789', '35': '123456789', '36': '123456789',
-    '37': '123456789', '38': '123456789', '39': '123456789',
-    '41': '123456789', '42': '123456789', '43': '123456789',
-    '44': '123456789', '45': '123456789', '46': '123456789',
-    '47': '123456789', '48': '123456789', '49': '123456789',
-    '51': '123456789', '52': '123456789', '53': '123456789',
-    '54': '123456789', '55': '123456789', '56': '123456789',
-    '57': '123456789', '58': '123456789', '59': '123456789',
-    '61': '123456789', '62': '123456789', '63': '123456789',
-    '64': '123456789', '65': '123456789', '66': '123456789',
-    '67': '123456789', '68': '123456789', '69': '123456789',
-    '71': '123456789', '72': '123456789', '73': '123456789',
-    '74': '123456789', '75': '123456789', '76': '123456789',
-    '77': '123456789', '78': '123456789', '79': '123456789',
-    '81': '123456789', '82': '123456789', '83': '123456789',
-    '84': '123456789', '85': '123456789', '86': '123456789',
-    '87': '123456789', '88': '123456789', '89': '123456789',
-    '91': '123456789', '92': '123456789', '93': '123456789',
-    '94': '123456789', '95': '123456789', '96': '123456789',
-    '97': '123456789', '98': '123456789', '99': '123456789',
-}
-RNC_DICT = {
-    0: 'rnc',
-    '11': '123456789', '12': '123456789', '13': '123456789',
-    '14': '123456789', '15': '123456789', '16': '123456789',
-    '17': '123456789', '18': '123456789', '19': '123456789',
-    '21': '123456789', '22': '123456789', '23': '123456789',
-    '24': '123456789', '25': '123456789', '26': '123456789',
-    '27': '123456789', '28': '123456789', '29': '123456789',
-    '31': '123456789', '32': '123456789', '33': '123456789',
-    '34': '123456789', '35': '123456789', '36': '123456789',
-    '37': '123456789', '38': '123456789', '39': '123456789',
-    '41': '123456789', '42': '123456789', '43': '123456789',
-    '44': '123456789', '45': '123456789', '46': '123456789',
-    '47': '123456789', '48': '123456789', '49': '123456789',
-    '51': '123456789', '52': '123456789', '53': '123456789',
-    '54': '123456789', '55': '123456789', '56': '123456789',
-    '57': '123456789', '58': '123456789', '59': '123456789',
-    '61': '123456789', '62': '123456789', '63': '123456789',
-    '64': '123456789', '65': '123456789', '66': '123456789',
-    '67': '123456789', '68': '123456789', '69': '123456789',
-    '71': '123456789', '72': '123456789', '73': '123456789',
-    '74': '123456789', '75': '123456789', '76': '123456789',
-    '77': '123456789', '78': '123456789', '79': '123456789',
-    '81': '123456789', '82': '123456789', '83': '123456789',
-    '84': '123456789', '85': '123456789', '86': '123456789',
-    '87': '123456789', '88': '123456789', '89': '123456789',
-    '91': '123456789', '92': '123456789', '93': '123456789',
-    '94': '123456789', '95': '123456789', '96': '123456789',
-    '97': '123456789', '98': '123456789', '99': '123456789',
-}
-NCR_DICT = {
-    0: 'ncr',
-    '11': '123456789', '12': '123456789', '13': '123456789',
-    '14': '123456789', '15': '123456789', '16': '123456789',
-    '17': '123456789', '18': '123456789', '19': '123456789',
-    '21': '123456789', '22': '123456789', '23': '123456789',
-    '24': '123456789', '25': '123456789', '26': '123456789',
-    '27': '123456789', '28': '123456789', '29': '123456789',
-    '31': '123456789', '32': '123456789', '33': '123456789',
-    '34': '123456789', '35': '123456789', '36': '123456789',
-    '37': '123456789', '38': '123456789', '39': '123456789',
-    '41': '123456789', '42': '123456789', '43': '123456789',
-    '44': '123456789', '45': '123456789', '46': '123456789',
-    '47': '123456789', '48': '123456789', '49': '123456789',
-    '51': '123456789', '52': '123456789', '53': '123456789',
-    '54': '123456789', '55': '123456789', '56': '123456789',
-    '57': '123456789', '58': '123456789', '59': '123456789',
-    '61': '123456789', '62': '123456789', '63': '123456789',
-    '64': '123456789', '65': '123456789', '66': '123456789',
-    '67': '123456789', '68': '123456789', '69': '123456789',
-    '71': '123456789', '72': '123456789', '73': '123456789',
-    '74': '123456789', '75': '123456789', '76': '123456789',
-    '77': '123456789', '78': '123456789', '79': '123456789',
-    '81': '123456789', '82': '123456789', '83': '123456789',
-    '84': '123456789', '85': '123456789', '86': '123456789',
-    '87': '123456789', '88': '123456789', '89': '123456789',
-    '91': '123456789', '92': '123456789', '93': '123456789',
-    '94': '123456789', '95': '123456789', '96': '123456789',
-    '97': '123456789', '98': '123456789', '99': '123456789',
-}
-BNS_DICT = {
-    0: 'bns',
-    '11': '123456789', '12': '123456789', '13': '123456789',
-    '14': '123456789', '15': '123456789', '16': '123456789',
-    '17': '123456789', '18': '123456789', '19': '123456789',
-    '21': '123456789', '22': '123456789', '23': '123456789',
-    '24': '123456789', '25': '123456789', '26': '123456789',
-    '27': '123456789', '28': '123456789', '29': '123456789',
-    '31': '123456789', '32': '123456789', '33': '123456789',
-    '34': '123456789', '35': '123456789', '36': '123456789',
-    '37': '123456789', '38': '123456789', '39': '123456789',
-    '41': '123456789', '42': '123456789', '43': '123456789',
-    '44': '123456789', '45': '123456789', '46': '123456789',
-    '47': '123456789', '48': '123456789', '49': '123456789',
-    '51': '123456789', '52': '123456789', '53': '123456789',
-    '54': '123456789', '55': '123456789', '56': '123456789',
-    '57': '123456789', '58': '123456789', '59': '123456789',
-    '61': '123456789', '62': '123456789', '63': '123456789',
-    '64': '123456789', '65': '123456789', '66': '123456789',
-    '67': '123456789', '68': '123456789', '69': '123456789',
-    '71': '123456789', '72': '123456789', '73': '123456789',
-    '74': '123456789', '75': '123456789', '76': '123456789',
-    '77': '123456789', '78': '123456789', '79': '123456789',
-    '81': '123456789', '82': '123456789', '83': '123456789',
-    '84': '123456789', '85': '123456789', '86': '123456789',
-    '87': '123456789', '88': '123456789', '89': '123456789',
-    '91': '123456789', '92': '123456789', '93': '123456789',
-    '94': '123456789', '95': '123456789', '96': '123456789',
-    '97': '123456789', '98': '123456789', '99': '123456789',
-}
 
 CELL_GIVEN_MARK = '='
 CELL_SOLVE_MARK = '+'
 
-PAD = 2
-
-DIGITS = '123456789'
-MAX_CELLS = 81
-MAX_DIGITS = len(DIGITS)
-
-ZERO = '0'
-EMPTY = P  # ZERO | P
-VALID_GRID_ENTRIES = DIGITS + P + ZERO
+OP_ADD = '+'  # was ADD
+OP_CLR = '-'  # waa CLR
+OP_SET = '='  # was SET
 
 
 COLS = [
@@ -367,6 +164,48 @@ SQUARES = [
     '81', '82', '83', '84', '85', '86', '87', '88', '89',
     '91', '92', '93', '94', '95', '96', '97', '98', '99'
 ]
+
+
+
+BOARD_GRID_DICT = {
+    0: 'rcn',
+    1: 0,
+    '01': '123456789', '02': '123456789', '03': '123456789',
+    '04': '123456789', '05': '123456789', '06': '123456789',
+    '07': '123456789', '08': '123456789', '09': '123456789',
+    '10': '123456789', '20': '123456789', '30': '123456789',
+    '40': '123456789', '50': '123456789', '60': '123456789',
+    '70': '123456789', '80': '123456789', '90': '123456789',
+    '11': '123456789', '12': '123456789', '13': '123456789',
+    '14': '123456789', '15': '123456789', '16': '123456789',
+    '17': '123456789', '18': '123456789', '19': '123456789',
+    '21': '123456789', '22': '123456789', '23': '123456789',
+    '24': '123456789', '25': '123456789', '26': '123456789',
+    '27': '123456789', '28': '123456789', '29': '123456789',
+    '31': '123456789', '32': '123456789', '33': '123456789',
+    '34': '123456789', '35': '123456789', '36': '123456789',
+    '37': '123456789', '38': '123456789', '39': '123456789',
+    '41': '123456789', '42': '123456789', '43': '123456789',
+    '44': '123456789', '45': '123456789', '46': '123456789',
+    '47': '123456789', '48': '123456789', '49': '123456789',
+    '51': '123456789', '52': '123456789', '53': '123456789',
+    '54': '123456789', '55': '123456789', '56': '123456789',
+    '57': '123456789', '58': '123456789', '59': '123456789',
+    '61': '123456789', '62': '123456789', '63': '123456789',
+    '64': '123456789', '65': '123456789', '66': '123456789',
+    '67': '123456789', '68': '123456789', '69': '123456789',
+    '71': '123456789', '72': '123456789', '73': '123456789',
+    '74': '123456789', '75': '123456789', '76': '123456789',
+    '77': '123456789', '78': '123456789', '79': '123456789',
+    '81': '123456789', '82': '123456789', '83': '123456789',
+    '84': '123456789', '85': '123456789', '86': '123456789',
+    '87': '123456789', '88': '123456789', '89': '123456789',
+    '91': '123456789', '92': '123456789', '93': '123456789',
+    '94': '123456789', '95': '123456789', '96': '123456789',
+    '97': '123456789', '98': '123456789', '99': '123456789',
+}
+
+
 
 LINEAR_TO_ROWCOL = {
      0 : '11',
@@ -790,6 +629,101 @@ BLK_ONLY_PEERS_U = {
     '99' : ['77', '78', '87', '88'],
 }
 
+BLOCK_PEERS = {
+    '1': '5689',
+    '2': '4679',
+    '3': '4578',
+    '4': '2389',
+    '5': '1379',
+    '6': '1278',
+    '7': '2356',
+    '8': '1346',
+    '9': '1245',
+}
+
+RCN_BLOCK_PEERS = {
+    '11': ['b23n.-s123', 'b47n.-s147'],
+    '12': ['b23n.-s123', 'b47n.-s258'],
+    '13': ['b23n.-s123', 'b47n.-s369'],
+    '14': ['b13n.-s123', 'b58n.-s147'],
+    '15': ['b13n.-s123', 'b58n.-s258'],
+    '16': ['b13n.-s123', 'b58n.-s369'],
+    '17': ['b12n.-s123', 'b69n.-s147'],
+    '18': ['b12n.-s123', 'b69n.-s258'],
+    '19': ['b12n.-s123', 'b69n.-s369'],
+    '21': ['b23n.-s456', 'b47n.-s147'],
+    '22': ['b23n.-s456', 'b47n.-s258'],
+    '23': ['b23n.-s456', 'b47n.-s369'],
+    '24': ['b13n.-s456', 'b58n.-s147'],
+    '25': ['b13n.-s456', 'b58n.-s258'],
+    '26': ['b13n.-s456', 'b58n.-s369'],
+    '27': ['b12n.-s456', 'b69n.-s147'],
+    '28': ['b12n.-s456', 'b69n.-s258'],
+    '29': ['b12n.-s456', 'b69n.-s369'],
+    '31': ['b23n.-s789', 'b47n.-s147'],
+    '32': ['b23n.-s789', 'b47n.-s258'],
+    '33': ['b23n.-s789', 'b47n.-s369'],
+    '34': ['b13n.-s789', 'b58n.-s147'],
+    '35': ['b13n.-s789', 'b58n.-s258'],
+    '36': ['b13n.-s789', 'b58n.-s369'],
+    '37': ['b12n.-s789', 'b69n.-s147'],
+    '38': ['b12n.-s789', 'b69n.-s258'],
+    '39': ['b12n.-s789', 'b69n.-s369'],
+    '41': ['b56n.-s123', 'b17n.-s147'],
+    '42': ['b56n.-s123', 'b17n.-s258'],
+    '43': ['b56n.-s123', 'b17n.-s369'],
+    '44': ['b46n.-s123', 'b28n.-s147'],
+    '45': ['b46n.-s123', 'b28n.-s258'],
+    '46': ['b46n.-s123', 'b28n.-s369'],
+    '47': ['b45n.-s123', 'b39n.-s147'],
+    '48': ['b45n.-s123', 'b39n.-s258'],
+    '49': ['b45n.-s123', 'b39n.-s369'],
+    '51': ['b56n.-s456', 'b17n.-s147'],
+    '52': ['b56n.-s456', 'b17n.-s258'],
+    '53': ['b56n.-s456', 'b17n.-s369'],
+    '54': ['b46n.-s456', 'b28n.-s147'],
+    '55': ['b46n.-s456', 'b28n.-s258'],
+    '56': ['b46n.-s456', 'b28n.-s369'],
+    '57': ['b45n.-s456', 'b39n.-s147'],
+    '58': ['b45n.-s456', 'b39n.-s258'],
+    '59': ['b45n.-s456', 'b39n.-s369'],
+    '61': ['b56n.-s789', 'b17n.-s147'],
+    '62': ['b56n.-s789', 'b17n.-s258'],
+    '63': ['b56n.-s789', 'b17n.-s369'],
+    '64': ['b46n.-s789', 'b28n.-s147'],
+    '65': ['b46n.-s789', 'b28n.-s258'],
+    '66': ['b46n.-s789', 'b28n.-s369'],
+    '67': ['b45n.-s789', 'b39n.-s147'],
+    '68': ['b45n.-s789', 'b39n.-s258'],
+    '69': ['b45n.-s789', 'b39n.-s369'],
+    '71': ['b89n.-s123', 'b14n.-s147'],
+    '72': ['b89n.-s123', 'b14n.-s258'],
+    '73': ['b89n.-s123', 'b14n.-s369'],
+    '74': ['b79n.-s123', 'b25n.-s147'],
+    '75': ['b79n.-s123', 'b25n.-s258'],
+    '76': ['b79n.-s123', 'b58n.-s369'],
+    '77': ['b78n.-s123', 'b36n.-s147'],
+    '78': ['b78n.-s123', 'b36n.-s258'],
+    '79': ['b78n.-s123', 'b36n.-s369'],
+    '81': ['b89n.-s456', 'b14n.-s147'],
+    '82': ['b89n.-s456', 'b14n.-s258'],
+    '83': ['b89n.-s456', 'b14n.-s369'],
+    '84': ['b79n.-s456', 'b25n.-s147'],
+    '85': ['b79n.-s456', 'b25n.-s258'],
+    '86': ['b79n.-s456', 'b25n.-s369'],
+    '87': ['b78n.-s456', 'b36n.-s147'],
+    '88': ['b78n.-s456', 'b36n.-s258'],
+    '89': ['b78n.-s456', 'b36n.-s369'],
+    '91': ['b89n.-s789', 'b14n.-s147'],
+    '92': ['b89n.-s789', 'b14n.-s258'],
+    '93': ['b89n.-s789', 'b14n.-s369'],
+    '94': ['b79n.-s789', 'b25n.-s147'],
+    '95': ['b79n.-s789', 'b25n.-s258'],
+    '96': ['b79n.-s789', 'b25n.-s369'],
+    '97': ['b78n.-s789', 'b36n.-s147'],
+    '98': ['b78n.-s789', 'b36n.-s258'],
+    '99': ['b78n.-s789', 'b36n.-s369'],
+}
 
 
 COL_TO_BLOCKS = {
@@ -1400,54 +1334,277 @@ ROW_PEERS = OrderedDict(ROW_PEERS_U)
 ROWCOL_PEERS = OrderedDict(ROWCOL_PEERS_U)
 ALL_PEERS = OrderedDict(ALL_PEERS_U)
 
-def convert_bsrc(value):
-    x = int(value[0])
-    y = int(value[1])
-    a = 1 + (3 * ((x - 1) // 3)) + ((y - 1) // 3)
-    b = 1 + (3 * ((x + 2) % 3)) + ((y + 2) % 3)
-    return (str(a) + str(b))
-
-@property
-def grid_name(cmd):
-    return cmd[0] + cmd[2] + cmd[5]
-
-def deconstruct_cmd(cmd):
-    G = cmd[0] + cmd[2] + cmd[5]
-    X = cmd[1]
-    Y = cmd[3]
-    O = cmd[4]
-    Z = cmd[6]
-
-    cmd_stuff = namedtuple('cmd_stuff', 'grid row_coord, col_coord, operation, result')
-
-    retval = cmd_stuff(grid=G, row_coord=X, col_coord=Y, operation=O, result=Z)
-    return retval
-
-
-def form_cmd(G, S, O, V):
-    '''
-
-    :param G: 3-letter grid name
-    :param S: square - 2-digit, digits in g.DIGITS
-    :param O: operation = g.SET | g.CLR
-    :param V: 1-letter digit or value
-    :return:  sudoku command as 7-letter string
-    '''
-    cmd = G[0] + S[0] + G[1] + S[1] + O + G[2] + V
-    return cmd
-
-def grid_name_from_cmd(cmd):
-    name = cmd[0] + cmd[2] + cmd[5]
-    return name
-
-
-def pause(inp=': '):
-    input(inp)
 
 
 if __name__ == '__main__':
-    print('settings.py should NOT be executed directly')
-    exit()
-
+    file = __file__
+    print(f'running {file}')
 else:
-    print ('imported settings.py')
+    file = __file__
+    print(f'importing {file}')
+
+# <editor-fold desc="alpha listing"
+'''
+ADD = '+'
+ALL_PEERS__U     for keys in SQUARES
+ALL_PEERS = OrderedDict(ALL_PEERS_U)
+
+
+BLK_ONLY_PEERS_U   # todo not done yet - needs expanded to be all of a block?
+BLK_SQR_ROWS       = ['123', '456', '789']
+BLK_SQR_COLS       = ['147', '258', '369']
+BLK_TO_COLS        # = dict length 9    # also ROW_T0_SQRS
+BLK_TO_ROWS        # = dict length 9    # also ROW_TO_BLKS
+BLK_COL_ROWS        keys = 'bBcC  of lists of len=3  length = 81
+BLK_PEERS           = OrderedDict(BLK_PEERS_U)
+BLK_PEERS_U         for keys in SQUARES
+BLK_ROW_COLS        keys = 'bBrR  of lists of len=3  length = 81
+
+BNS = 'bns'
+BNS_DICT            keys are 0 and SQUARES
+BP = 0
+
+CELL_GIVEN_MARK = '='
+CELL_SOLVE_MARK = '+'
+CLR = '-'
+CNR = 'cnr'
+
+COL_PEERS       = OrderedDict(COL_PEERS_U)
+COL_PEERS_U      for keys in SQUARES
+COL_TO_BLKS     # = dict length 9
+COL_TO_BLOCKS   for keys in DIGITS
+COL_TO_SQRS     # = dict length 9
+
+COLOR_ASSERT = 'green'
+COLOR_BACKGROUND = 'white'
+COLOR_BKG = 'yellow'
+COLOR_BUTTON_FOCUS = 'yellow'
+COLOR_BUTTON_NO_FOCUS = COLOR_BACKGROUND
+COLOR_CLR = 'red'
+COLOR_HIGHLIGHT = 'yellow'
+COLOR_PAIR_1 = ['maroon1', 'orchid1']
+COLOR_PAIR_2 = ['DodgerBlue2', 'cyan']
+COLOR_REMOVE = 'red'
+COLOR_SET = 'green'
+COLOR_NUMBER_ENTERED = 'blue'
+COLOR_NUMBER_PUZZLE  = 'black'
+COLOR_OUTLINE_DISABLED = COLOR_BACKGROUND
+COLOR_OUTLINE_ENABLED = 'cyan'
+COLOR_TRANSPARENT = ''
+COLORS_LOAD_REMOVES = ['orange', 'cyan', 'red']
+
+COLS           9 lists of lists of length 9   squares for the Rows
+CRN = 'crn'
+CS = ', '
+
+def convert_bsrc(value):
+def deconstruct_cmd(cmd):
+def form_cmd(G, S, O, V):
+def grid_name(cmd):
+def grid_name_from_cmd(cmd):
+def pause(inp=': '):
+DIGITS = '123456789'
+
+EMPTY = P  # ZERO | P
+EQUAL = '='
+
+GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
+GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
+
+INFER = ' > '
+
+LINEAR             list of ints from 0 to 80  length = 81
+LINEAR_TO_ROWCOL   lenghth=81  keys ar ints, values = SQUARES
+LINK = ' + '
+
+MAX_CELLS = 81
+MAX_DIGITS = len(DIGITS)
+
+NBS = 'nbs'
+NCR = 'ncr'
+NCR_DICT   keys are 0 and SQUARES
+NL = '\n'
+NRC = 'nrc'
+
+P = '.'
+PAD = 2
+PS = '. '
+PUZZLE_DEFAULT =\
+'.....627........5....54..311.....5..97.8.2.64..6.....764..29....8........526.....'
+
+RCN = 'rcn'
+RCN_DICT          keys are 0 and SQUARES
+RNC = 'rnc'
+RNC_DICT          keys are 0 and SQUARES
+
+ROW_PEERS          = OrderedDict(ROW_PEERS_U)
+ROW_PEERS_U       for keys in SQUARES
+ROW_TO_BLKS     # = BLK_TO_ROWS
+ROW_TO_BLOCKS      for keys in DIGITS
+ROW_TO_SQRS     # = BLK_TO_COLS
+ROWCOL_PEERS       = OrderedDict(ROWCOL_PEERS_U)
+ROWCOL_PEERS_U     for keys in SQUARES
+ROWCOL_TO_LINEAR   keys are in SQUARES  retruns int
+ROWS               9 lists of lists of length 9   squares for the Rows
+
+SET = '='
+SmallNumberTag = "SN"
+SmallSquareTag = "SS"
+SP = ' '
+SQUARES   list  of length 81  '11' to '99'
+STEP_MODE_MODES = ['every_step', 'major_step', 'no_step',
+STEP_MODE_NAMES = [ 'Every Step', 'Major Step', 'No Step']
+
+VALID_GRID_ENTRIES = DIGITS + P + ZERO
+ZERO = '0'
+'''
+# </editor-fold>
+
+# <editor-fold desc="functional listing"
+'''
+
+STEP_MODE_MODES = [
+    'every_step',
+    'major_step',
+    'no_step',
+]
+
+STEP_MODE_NAMES = [
+    'Every Step',
+    'Major Step',
+    'No Step',
+]
+
+
+BASIC_CMD_LENGTH = 7
+DIGITS = '123456789'
+MAX_CELLS = 81
+MAX_DIGITS = len(DIGITS)
+PAD = 2
+ZERO = '0'
+
+ADD = '+'
+BP = 0
+EQUAL = '='
+EMPTY = P  # ZERO | P
+SET = '='
+CLR = '-'
+LINK = ' + '
+INFER = ' > '
+P = '.'
+PS = '. '
+CS = ', '
+SP = ' '
+NL = '\n'
+
+BigNumberTag = "BN"
+BigSquareTag = "BS"
+SmallNumberTag = "SN"
+SmallSquareTag = "SS"
+
+VALID_GRID_ENTRIES = DIGITS + P + ZERO
+
+CELL_GIVEN_MARK = '='
+CELL_SOLVE_MARK = '+'
+
+
+RCN = 'rcn'
+RNC = 'rnc'
+NCR = 'ncr'
+BNS = 'bns'
+
+CRN = 'crn'
+NRC = 'nrc'
+NBS = 'nbs'
+CNR = 'cnr'
+
+GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
+GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
+GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+
+GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
+GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
+GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+
+COLOR_BKG = 'yellow'
+COLOR_CLR = 'red'
+COLOR_SET = 'green'
+
+
+COLORS_LOAD_REMOVES = ['orange', 'cyan', 'red']
+COLOR_PAIR_1 = ['maroon1', 'orchid1']
+COLOR_PAIR_2 = ['DodgerBlue2', 'cyan']
+COLOR_ASSERT = 'green'
+COLOR_REMOVE = 'red'
+
+COLOR_TRANSPARENT = ''
+COLOR_BACKGROUND = 'white'
+
+COLOR_HIGHLIGHT = 'yellow'
+
+COLOR_BUTTON_FOCUS = 'yellow'
+COLOR_BUTTON_NO_FOCUS = COLOR_BACKGROUND
+
+COLOR_NUMBER_ENTERED = 'blue'
+COLOR_NUMBER_PUZZLE  = 'black'
+
+COLOR_OUTLINE_DISABLED = COLOR_BACKGROUND
+COLOR_OUTLINE_ENABLED = 'cyan'
+
+
+PUZZLE_DEFAULT =\
+'.....627........5....54..311.....5..97.8.2.64..6.....764..29....8........526.....'
+
+
+LINEAR    list of ints from 0 to 80  length = 81
+COLS      9 lists of lists of length 9   squares for the Rows
+ROWS      9 lists of lists of length 9   squares for the Rows
+SQUARES   list  of length 81  '11' to '99'
+
+
+BLK_SQR_ROWS = ['123', '456', '789']
+BLK_SQR_COLS = ['147', '258', '369']
+
+BLK_TO_COLS     # = dict length 9    # also ROW_T0_SQRS
+BLK_TO_ROWS     # = dict length 9    # also ROW_TO_BLKS
+COL_TO_BLKS     # = dict length 9
+COL_TO_SQRS     # = dict length 9
+ROW_TO_BLKS     # = BLK_TO_ROWS
+ROW_TO_SQRS     # = BLK_TO_COLS
+
+------ dictionariesw
+
+BNS_DICT   keys are 0 and SQUARES
+NCR_DICT   keys are 0 and SQUARES
+RCN_DICT   keys are 0 and SQUARES
+RNC_DICT   keys are 0 and SQUARES
+
+
+LINEAR_TO_ROWCOL  lenghth=81  keys ar ints, values = SQUARES
+ROWCOL_TO_LINEAR   keys are in SQUARES  retruns int
+
+BLK_COL_ROWS   keys = 'bBcC  of lists of len=3  length = 81
+BLK_ROW_COLS = keys = 'bBrR  of lists of len=3  length = 81
+
+
+COL_TO_BLOCKS    for keys in DIGITS
+ROW_TO_BLOCKS    for keys in DIGITS
+
+COL_PEERS_U      for keys in SQUARES
+ROW_PEERS_U      for keys in SQUARES
+ROWCOL_PEERS_U   for keys in SQUARES
+
+BLK_ONLY_PEERS_U  # todo not done yet - needs expanded to be all of a block?
+BLK_PEERS_U      for keys in SQUARES
+
+ALL_PEERS__U     for keys in SQUARES
+
+ALL_PEERS = OrderedDict(ALL_PEERS_U)
+BLK_PEERS = OrderedDict(BLK_PEERS_U)
+COL_PEERS = OrderedDict(COL_PEERS_U)
+ROW_PEERS = OrderedDict(ROW_PEERS_U)
+ROWCOL_PEERS = OrderedDict(ROWCOL_PEERS_U)
+
+'''
+# </editor-fold>

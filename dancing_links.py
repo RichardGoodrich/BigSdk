@@ -3850,7 +3850,10 @@ def menu():
             print(MAIN_MSG)
             inp = True
 
-if __name__ == "__main__":
-    menu()
+if __name__ == '__main__':
+    file = __file__
+    print(f'running {file} ')
 else:
-    print("importing Ali Asaf's Dancing Links")
+    file = __file__
+    print("importing         Ali Asaf's Dancing Links")
+    print(f'importing {file} ')

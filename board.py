@@ -116,6 +116,9 @@ def main():
     print_grid(0)
 
 if __name__ == '__main__':
+    file = __file__
+    print(f'running {file} ')
     main()
 else:
-    print('board.py is being imported')
+    file = __file__
+    print(f'importing {file} ')

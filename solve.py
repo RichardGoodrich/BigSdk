@@ -16,6 +16,7 @@ import cmds
 import settings as g
 import signals as sigs
 import solve_subsets
+import support as s
 # </editor-fold>
 
 # <editor-fold desc="logging setup"
@@ -30,10 +31,15 @@ logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
 # <editor-fold desc="globals"
-BP = 0
+BP = g.BREAK_POINT
+SET = g.OP_SET
+GRID_NAMES = g.GRID_NAMES
+COLS = g.COLS
+ROWS = g.ROWS
+MAX_CELLS = g.MAX_CELLS
 # </editor-fold>
 
-def all(x):
+def all(cb):
     '''
     All uses all seolution methods.
 
@@ -42,7 +48,7 @@ def all(x):
 
     try:
         while True:
-            if singles(x):
+            if singles(cb):
                 display()
                 if is_solved():
                     return
@@ -60,7 +66,7 @@ def all(x):
         logger_except.exception(e)
         sys.exit()
 
-def singles(x):
+def singles(cb):
     '''
     Singles are solved by row on all grids.
 
@@ -70,14 +76,14 @@ def singles(x):
     try:
         for grid_index in range(4):
             grid = board.grid_list[grid_index]
-            grid_name = g.GRID_NAMES[grid_index]
-            for row in g.ROWS:
+            grid_name = GRID_NAMES[grid_index]
+            for row in ROWS:
                 for square in row:
                     values = grid[square]
                     if len(values) == 1:
-                        cmd = g.form_cmd(grid[0], square, g.SET, values)
+                        cmd = s.form_cmd(grid[0], square, SET, values)
                         long_cmd = f'{grid_name} NS = {cmd}'
-                        cmds.big_cmd(x, long_cmd)
+                        cmds.big_cmd(cb, long_cmd)
                         return True
         return False
 
@@ -93,7 +99,7 @@ def is_solved():
     '''
     try:
         for grid_index in range(4):
-            if board.grid_list[grid_index][1] != g.MAX_CELLS:
+            if board.grid_list[grid_index][1] != MAX_CELLS:
                 return False
         return True
 
@@ -116,9 +122,9 @@ def display():
         sys.exit()
 
 
-
-
 if __name__ == '__main__':
-    pass
+    file = __file__
+    print(f'running {file} ')
 else:
-    print('solve.py is being imported')
+    file = __file__
+    print(f'importing {file} ')

@@ -1,4 +1,8 @@
+'''
+cell_cmd.py
 
+2021-05-05 Wed
+'''
 
 # <editor-fold desc="python imports"
 import logging as log
@@ -7,119 +11,32 @@ import sys
 
 # <editor-fold desc="local imports"
 import board
-from cmd_stuff import CmdS
+from cmd_support import CmdS as c
 import colors
 import settings as g
 import signals as sigs
 # </editor-fold>
 
 # <editor-fold desc="globasl"
-L2 = g.SP * 3
-L3 = g.SP * 6
-L4 = g.SP * 9
+L2 = ' ' * 3
+L3 = ' ' * 6
+L4 = ' ' * 9
 
-BP = 0
-NL = '\n'
-GRID_NAMES_1 = ['rcn', 'rnc', 'ncr', 'bns']
-GRID_NAMES_2 = ['crn', 'nrc', 'cnr', 'nbs']
-GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
-MAX_GRID_LENGTH = len(GRID_NAMES_1)
+ADD = g.OP_ADD
+CLR = g.OP_CLR
+SET = g.OP_SET
 
-BLOCK_PEERS = {
-    '1': '5689',
-    '2': '4679',
-    '3': '4578',
-    '4': '2389',
-    '5': '1379',
-    '6': '1278',
-    '7': '2356',
-    '8': '1346',
-    '9': '1245',
-}
 
-RCN_BLOCK_PEERS = {
-    '11': ['b23n.-s123', 'b47n.-s147'],
-    '12': ['b23n.-s123', 'b47n.-s258'],
-    '13': ['b23n.-s123', 'b47n.-s369'],
-    '14': ['b13n.-s123', 'b58n.-s147'],
-    '15': ['b13n.-s123', 'b58n.-s258'],
-    '16': ['b13n.-s123', 'b58n.-s369'],
-    '17': ['b12n.-s123', 'b69n.-s147'],
-    '18': ['b12n.-s123', 'b69n.-s258'],
-    '19': ['b12n.-s123', 'b69n.-s369'],
-    '21': ['b23n.-s456', 'b47n.-s147'],
-    '22': ['b23n.-s456', 'b47n.-s258'],
-    '23': ['b23n.-s456', 'b47n.-s369'],
-    '24': ['b13n.-s456', 'b58n.-s147'],
-    '25': ['b13n.-s456', 'b58n.-s258'],
-    '26': ['b13n.-s456', 'b58n.-s369'],
-    '27': ['b12n.-s456', 'b69n.-s147'],
-    '28': ['b12n.-s456', 'b69n.-s258'],
-    '29': ['b12n.-s456', 'b69n.-s369'],
-    '31': ['b23n.-s789', 'b47n.-s147'],
-    '32': ['b23n.-s789', 'b47n.-s258'],
-    '33': ['b23n.-s789', 'b47n.-s369'],
-    '34': ['b13n.-s789', 'b58n.-s147'],
-    '35': ['b13n.-s789', 'b58n.-s258'],
-    '36': ['b13n.-s789', 'b58n.-s369'],
-    '37': ['b12n.-s789', 'b69n.-s147'],
-    '38': ['b12n.-s789', 'b69n.-s258'],
-    '39': ['b12n.-s789', 'b69n.-s369'],
-    '41': ['b56n.-s123', 'b17n.-s147'],
-    '42': ['b56n.-s123', 'b17n.-s258'],
-    '43': ['b56n.-s123', 'b17n.-s369'],
-    '44': ['b46n.-s123', 'b28n.-s147'],
-    '45': ['b46n.-s123', 'b28n.-s258'],
-    '46': ['b46n.-s123', 'b28n.-s369'],
-    '47': ['b45n.-s123', 'b39n.-s147'],
-    '48': ['b45n.-s123', 'b39n.-s258'],
-    '49': ['b45n.-s123', 'b39n.-s369'],
-    '51': ['b56n.-s456', 'b17n.-s147'],
-    '52': ['b56n.-s456', 'b17n.-s258'],
-    '53': ['b56n.-s456', 'b17n.-s369'],
-    '54': ['b46n.-s456', 'b28n.-s147'],
-    '55': ['b46n.-s456', 'b28n.-s258'],
-    '56': ['b46n.-s456', 'b28n.-s369'],
-    '57': ['b45n.-s456', 'b39n.-s147'],
-    '58': ['b45n.-s456', 'b39n.-s258'],
-    '59': ['b45n.-s456', 'b39n.-s369'],
-    '61': ['b56n.-s789', 'b17n.-s147'],
-    '62': ['b56n.-s789', 'b17n.-s258'],
-    '63': ['b56n.-s789', 'b17n.-s369'],
-    '64': ['b46n.-s789', 'b28n.-s147'],
-    '65': ['b46n.-s789', 'b28n.-s258'],
-    '66': ['b46n.-s789', 'b28n.-s369'],
-    '67': ['b45n.-s789', 'b39n.-s147'],
-    '68': ['b45n.-s789', 'b39n.-s258'],
-    '69': ['b45n.-s789', 'b39n.-s369'],
-    '71': ['b89n.-s123', 'b14n.-s147'],
-    '72': ['b89n.-s123', 'b14n.-s258'],
-    '73': ['b89n.-s123', 'b14n.-s369'],
-    '74': ['b79n.-s123', 'b25n.-s147'],
-    '75': ['b79n.-s123', 'b25n.-s258'],
-    '76': ['b79n.-s123', 'b58n.-s369'],
-    '77': ['b78n.-s123', 'b36n.-s147'],
-    '78': ['b78n.-s123', 'b36n.-s258'],
-    '79': ['b78n.-s123', 'b36n.-s369'],
-    '81': ['b89n.-s456', 'b14n.-s147'],
-    '82': ['b89n.-s456', 'b14n.-s258'],
-    '83': ['b89n.-s456', 'b14n.-s369'],
-    '84': ['b79n.-s456', 'b25n.-s147'],
-    '85': ['b79n.-s456', 'b25n.-s258'],
-    '86': ['b79n.-s456', 'b25n.-s369'],
-    '87': ['b78n.-s456', 'b36n.-s147'],
-    '88': ['b78n.-s456', 'b36n.-s258'],
-    '89': ['b78n.-s456', 'b36n.-s369'],
-    '91': ['b89n.-s789', 'b14n.-s147'],
-    '92': ['b89n.-s789', 'b14n.-s258'],
-    '93': ['b89n.-s789', 'b14n.-s369'],
-    '94': ['b79n.-s789', 'b25n.-s147'],
-    '95': ['b79n.-s789', 'b25n.-s258'],
-    '96': ['b79n.-s789', 'b25n.-s369'],
-    '97': ['b78n.-s789', 'b36n.-s147'],
-    '98': ['b78n.-s789', 'b36n.-s258'],
-    '99': ['b78n.-s789', 'b36n.-s369'],
-}
+BP = g.BREAK_POINT
+NL = g.NEW_LINE
+GRID_NAMES_1 = g.GRID_NAMES_1
+GRID_NAMES_2 = g.GRID_NAMES_2
+GRID_NAMES = g.GRID_NAMES
+
+MAX_GRID_LENGTH = g.NUMBER_OF_GRIDS
+
+BLOCK_PEERS = g.BLOCK_PEERS
+RCN_BLOCK_PEERS = g.RCN_BLOCK_PEERS
 # </editor-fold>
 
 # <editor-fold desc="logging setup"
@@ -145,7 +62,7 @@ class CellCmd:
     val = ''
 
     @classmethod
-    def base_cmd(cls, x, basic_cmd):
+    def base_cmd(cls, cb, basic_cmd):
         '''
         The single point of contact for writing a new grid value
 
@@ -156,11 +73,11 @@ class CellCmd:
         '''
         try:
             cls.cmd = basic_cmd
-            CmdS.set(cls.cmd)
-            cls.op = CmdS.operation
-            cls.sqr = CmdS.square
-            cls.val = CmdS.value
-            cls.grid_index = CmdS.grid_index
+            c.set(cls.cmd)
+            cls.op = c.operation
+            cls.sqr = c.square
+            cls.val = c.value
+            cls.grid_index = c.grid_index
             cls.cell = board.grid_list[cls.grid_index][cls.sqr]
 
             cls.dual_force_handler()
@@ -172,15 +89,15 @@ class CellCmd:
                 raise Exception(f'cmd = {cls.cmd}, '
                                 f'val = {cls.val} not in cell = {cls.cell}')
 
-            if cls.op == g.CLR:
+            if cls.op == CLR:
                 cls.clr_cmd()
-            elif cls.op == g.SET:
+            elif cls.op == SET:
                 cls.set_cmd()
-            elif cls.op == g.ADD:
+            elif cls.op == ADD:
                 cls.add_cmd()
 
             if sigs.step != sigs.steps.no_step:
-                cls.color_cmd(x)
+                cls.color_cmd(cb)
 
             board.cmd(cls.grid_index, cls.sqr, cls.cell)
             cls.dual_force_handler()
@@ -189,11 +106,11 @@ class CellCmd:
             sigs.GuiCmd.grid_index = cls.grid_index
             sigs.GuiCmd.square = cls.sqr
             sigs.GuiCmd.cell = cls.cell
-            x()
+            cb()
 
             if sigs.step == sigs.steps.every_step:
                 sigs.GuiCmd.cmd = sigs.gui_cmd.wait
-                x()
+                cb()
 
             return
 
@@ -260,10 +177,10 @@ class CellCmd:
 
     def dual_force_handler():
         if sigs.is_DF:
-            if CellCmd.op == g.SET:
+            if CellCmd.op == SET:
                 CellCmd.df_string = f'{L2}cmd = {CellCmd.cmd} sqr = {CellCmd.sqr}' \
                                  f'  cell = {CellCmd.cell} ->'
-            elif CellCmd.op == g.CLR:
+            elif CellCmd.op == CLR:
                 CellCmd.df_string = f'{L2}cmd = {CellCmd.cmd} sqr = {CellCmd.sqr}' \
                                  f'  cell = {CellCmd.cell} ->'
             else:
@@ -272,27 +189,30 @@ class CellCmd:
                 CellCmd.df_string += f'{CellCmd.cell} for case {CellCmd.df_case}, ' \
                                   f'count = {count} '
 
-    def color_cmd(x):
+    def color_cmd(cb):
         sigs.GuiCmd.cmd = sigs.gui_cmd.color
         sigs.GuiCmd.grid_index = CellCmd.grid_index
-        if CellCmd.op == g.SET:
+        if CellCmd.op == SET:
             sigs.GuiCmd.tag = f'SS_{CellCmd.sqr}'
             sigs.GuiCmd.color = colors.highlight
-            x()
+            cb()
 
             sigs.GuiCmd.tag = f'BS_{CellCmd.sqr}'
             sigs.GuiCmd.color = colors.highlight
-            x()
+            cb()
 
             sigs.GuiCmd.tag = f'SS_{CellCmd.sqr}-{CellCmd.val}'
             sigs.GuiCmd.color = colors.assert_small_square
-            x()
-        elif CellCmd.op == g.CLR:
+            cb()
+        elif CellCmd.op == CLR:
             sigs.GuiCmd.tag = f'SS_{CellCmd.sqr}-{CellCmd.val}'
             sigs.GuiCmd.color = colors.remove_small_square
-            x()
+            cb()
+
 
 if __name__ == '__main__':
-    pass
+    file = __file__
+    print(f'running {file} ')
 else:
-    print('cell_cmd.py is being imported')
+    file = __file__
+    print(f'importing {file} ')

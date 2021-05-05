@@ -32,19 +32,21 @@ logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
 # <editor-fold desc="globals"
-BP = 0
-NL = '\n'
+COLOR_BACKGROUND = colors.COLOR_BACKGROUND
+COLOR_NUMBER_ENTERED = colors.COLOR_NUMBER_ENTERED
+COLOR_NUMBER_PUZZLE = colors.COLOR_NUMBER_PUZZLE
 
-BIG_SQUARE_DATA = {
-    'fill': 'white',
-    'outline': 'white',
-    'state': 'normal',
-    'tags': ('BS', 'BS_xy'),
-    'width': 4
-}
+GRID_NAMES = g.GRID_NAMES_1
+GRID_NAMES_1 = g.GRID_NAMES_1
+CELL_GIVEN_MARK = g.CELL_GIVEN_MARK
 
-DIGITS = '123456789'
-MAX_CELLS = 81
+BP = g.BREAK_POINT
+NL = g.NEW_LINE
+DIGITS = g.DIGITS
+MAX_CELLS = g.MAX_CELLS
+SQUARES = g.SQUARES
+
+
 MAX_DIGITS = len(DIGITS)
 
 GRID_LINE_NARROW = 1
@@ -54,17 +56,13 @@ NUMBER_OF_GRID_LINES = 20
 NUMBER_OF_BIG_SQUARES = 81
 NUMBER_OF_LITTLE_SQUARES = 9 * 81
 
-SQUARES = [
-    '11', '12', '13', '14', '15', '16', '17', '18', '19',
-    '21', '22', '23', '24', '25', '26', '27', '28', '29',
-    '31', '32', '33', '34', '35', '36', '37', '38', '39',
-    '41', '42', '43', '44', '45', '46', '47', '48', '49',
-    '51', '52', '53', '54', '55', '56', '57', '58', '59',
-    '61', '62', '63', '64', '65', '66', '67', '68', '69',
-    '71', '72', '73', '74', '75', '76', '77', '78', '79',
-    '81', '82', '83', '84', '85', '86', '87', '88', '89',
-    '91', '92', '93', '94', '95', '96', '97', '98', '99'
-]
+BIG_SQUARE_DATA = {
+    'fill': 'white',
+    'outline': 'white',
+    'state': 'normal',
+    'tags': ('BS', 'BS_xy'),
+    'width': 4
+}
 # </editor-fold>
 
 
@@ -122,7 +120,7 @@ class Grid(tk.Frame):
         self.master = master
         self.master.protocol('WM_DELETE_WINDOW', self.disable_close)
         self.name = name
-        self.grid_index = g.GRID_NAMES.index(self.name)
+        self.grid_index = GRID_NAMES.index(self.name)
 
         self.master.title(name)
         self.master.geometry(Grid.grid_locations[self.grid_index])
@@ -130,17 +128,17 @@ class Grid(tk.Frame):
         if sigs.is_resizeable:
             self.master.resizable(True, True)
             self.canvas = ResizingCanvas(self.master, width=500, height=500,
-                                         bg=g.COLOR_BACKGROUND, highlightthickness=0)
+                                         bg=COLOR_BACKGROUND, highlightthickness=0)
         else:
             self.master.resizable(False, False)
-            self.canvas = tk.Canvas(self.master, width=500, height=500, bg=g.COLOR_BACKGROUND)
+            self.canvas = tk.Canvas(self.master, width=500, height=500, bg=COLOR_BACKGROUND)
 
         self.canvas.pack(fill=tk.BOTH, expand=tk.YES)
         self.canvas.create_text(20, 20, text=self.name, fill='gray', state='normal', font=("arial", 16))
         # </editor-fold>
 
         self.color_tag_list = []
-        self.puzzle_dict = dict(zip(g.SQUARES, [g.DIGITS] * 81))
+        self.puzzle_dict = dict(zip(SQUARES, [DIGITS] * 81))
 
         self.draw_big_squares()
         self.draw_big_numbers()
@@ -220,7 +218,7 @@ class Grid(tk.Frame):
                 off = Grid.grid_offset
                 size = Grid.size_of_big_squares
                 length = 9 * size
-                nog = len(g.GRID_NAMES_1)
+                nog = len(GRID_NAMES_1)
                 nol = NUMBER_OF_GRID_LINES // 2
 
                 col_coords = [(x * size + off, off, x * size + off, off + length) for x in range(nol)]
@@ -354,7 +352,7 @@ class Grid(tk.Frame):
 
     def draw_grid_labels(self, grid_index):
         try:
-            grid_name = g.GRID_NAMES[grid_index]
+            grid_name = GRID_NAMES[grid_index]
             x = grid_name[0]
             y =grid_name[1]
 
@@ -426,10 +424,10 @@ class Grid(tk.Frame):
 
     def display_numbers(self):
         try:
-            for s in g.SQUARES:
+            for s in SQUARES:
                 digits = self.puzzle_dict[s]
-                if digits[0] in g.DIGITS:
-                    for d in g.DIGITS:
+                if digits[0] in DIGITS:
+                    for d in DIGITS:
                         small_square = 'SS_' + s + '-' + d
                         small_number = 'SN_' + s + '-' + d
                         if (d in digits):
@@ -441,10 +439,10 @@ class Grid(tk.Frame):
                     self.canvas.tag_raise('SS_' + s)
                     self.canvas.tag_raise('SN_' + s)
                 else:
-                    if digits[0] == g.CELL_GIVEN_MARK:
-                        color_big_number = g.COLOR_NUMBER_PUZZLE
+                    if digits[0] == CELL_GIVEN_MARK:
+                        color_big_number = COLOR_NUMBER_PUZZLE
                     else:
-                        color_big_number = g.COLOR_NUMBER_ENTERED
+                        color_big_number = COLOR_NUMBER_ENTERED
                     digit = digits[1]
                     self.canvas.itemconfig('BN_' + s,
                                            state='normal',
@@ -462,7 +460,7 @@ class Grid(tk.Frame):
 
     def erase_puzzle(self):
         try:
-            self.puzzle_dict = dict(zip(g.SQUARES, [g.DIGITS] * 81))
+            self.puzzle_dict = dict(zip(SQUARES, [DIGITS] * 81))
             self.canvas.itemconfig('SS', state='normal')
             self.canvas.itemconfig('BS', state='hidden')
             self.canvas.itemconfig('BN', state='hidden')
@@ -506,9 +504,14 @@ def main():
     root.mainloop()
 
 if __name__ == '__main__':
+    file = __file__
+    print(f'running {file} ')
     main()
 else:
-    print('grids.py is being imported')
+    file = __file__
+    print(f'importing {file} ')
+
+
 
 '''
 rectangle
