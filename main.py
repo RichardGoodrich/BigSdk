@@ -5,9 +5,7 @@ ref: ../notes/root.txt  for paths
 '''
 
 # <editor-fold desc="python imports"
-from collections import namedtuple
 import logging as log
-import os
 import sys
 import tkinter as tk
 # </editor-fold>
@@ -245,16 +243,6 @@ def gui(root):
             sys.exit()
 
     cb = cmd_to_gui   # cb for call back
-
-def set_folders():
-    try:
-        sigs.src_dir = os.getcwd()
-        sigs.root_dir = sigs.src_dir.replace('/src', '')
-        sigs.log_dir = os.path.join(sigs.root_dir, '/logs')
-
-    except Exception as e:
-        logger_except.exception(e)
-        sys.exit()
 
 if __name__ == '__main__':
     file = __file__

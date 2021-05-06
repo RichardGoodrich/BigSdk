@@ -4,8 +4,21 @@ settings.py  2021-05-05 Wed  Refactored
 see alphabetical listing in block comments at end
 '''
 
+# <editor-fold desc="python imports"
+import os
 from collections import namedtuple
-import colors
+# </editor-fold>
+
+# <editor-fold desc="paths"
+root_path = os.getcwd()
+docs_dir = os.path.join(root_path, 'docs/')
+logs_dir = os.path.join(root_path, 'logs/')
+notes_dir = os.path.join(root_path, 'notes/')
+src_dir = os.path.join(root_path, 'src/')
+except_path = os.path.join(logs_dir, 'log_exceptions.txt')
+
+except_format = '%(asctime)s  :%(levelname)s  :%(funcName)s  :%(lineno)d  :%(message)s'
+# </editor-fold>
 
 big_cmd = ''
 fail_msg = ''
@@ -16,20 +29,6 @@ is_grid = False
 is_load = False
 is_resizeable = False
 is_pretty_print = False
-# </editor-fold>
-
-# <editor-fold desc="paths"
-base_path = '/home/Big/Dropbox/root/private/computer/software/PyCharm/'
-sudoku_path = 'BigSdk/'
-logs_dir = 'logs/'
-exception_file = 'log_exceptions.txt'
-except_path = base_path + sudoku_path + logs_dir + exception_file
-except_format = '%(asctime)s  :%(levelname)s  :%(funcName)s  :%(lineno)d  :%(message)s'
-
-docs_dir = ''
-log_dir = ''
-root_dir = ''
-src_dir = ''
 # </editor-fold>
 
 # <editor-fold desc="screen config"
