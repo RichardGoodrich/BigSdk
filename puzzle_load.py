@@ -1,6 +1,7 @@
 '''
-puzzle_load.py  2021.04.17 Sat
+puzzle_load.py
 
+2021.04.17 Sat
 '''
 
 # <editor-fold desc="python imports"
@@ -14,6 +15,7 @@ from codec import Codec
 import dancing_links
 import settings as g
 import signals as sigs
+import support as s
 # </editor-fold>
 
 # <editor-fold desc="logging setup"
@@ -81,11 +83,11 @@ def do_puzzle(cb, puz_list):
                 cmds.big_cmd_load(cb, cmd)
 
                 if sigs.step != sigs.steps.no_step:
-                    sigs.GuiCmd.cmd = sigs.gui_cmd.wait
+                    s.gui_cmd_name = s.gui_cmd_type.wait
                     cb()
 
             except Exception as e:
-                sigs.GuiCmd.cmd = sigs.gui_cmd.displayNumbers
+                s.gui_cmd_name = s.gui_cmd_type.display
                 cb()
 
                 # sigs.is_load(False)

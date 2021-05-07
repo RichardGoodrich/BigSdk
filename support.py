@@ -6,8 +6,10 @@ support function are organized alphabetically
 
 '''
 
+
 # <editor-fold desc="python imports"
 from collections import namedtuple
+from dataclasses import dataclass
 import logging as log
 import colors
 import os
@@ -33,6 +35,40 @@ logger_except.addHandler(file_handler_except)
 
 # <editor-fold desc="globals"
 # </editor-fold>
+
+
+
+@dataclass
+class GuiCmdType:
+    cmd: str = 'cmd'
+    color: str = 'color'
+    display: str = 'display'
+    restore: str = 'restore'
+    wait: str = 'wait'
+
+
+@dataclass
+class ColorCmd:
+    cmd: str = 'color'
+    index: int = 0
+    color: str = ''
+    tsg: str = ''
+
+
+@dataclass
+class GridCmd:
+    cmd: str = 'cmd'
+    index: int = 0
+    square: str = '11'
+    cell: str = ''
+
+gui_cmd_type = GuiCmdType()
+gui_cmd_name = gui_cmd_type.wait
+
+grid_cmd = GridCmd()
+color_cmd = ColorCmd()
+
+
 
 def convert_bsrc(value):
     try:

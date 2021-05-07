@@ -16,6 +16,7 @@ from cmd_support import CmdS as c
 import colors
 import settings as g
 import signals as sigs
+import support as s
 # </editor-fold>
 
 # <editor-fold desc="globasl"
@@ -60,13 +61,13 @@ def big_cmd(cb):
             basic_cmd(cb, removal)
 
         if sigs.step == sigs.steps.major_step:
-            sigs.GuiCmd.cmd = sigs.gui_cmd.wait
+            s.gui_cmd_name = s.gui_cmd_type.wait
             cb()
 
-        sigs.GuiCmd.cmd = sigs.gui_cmd.restoreColors
+        s.gui_cmd_name = s.gui_cmd_type.restore
         cb()
 
-        sigs.GuiCmd.cmd = sigs.gui_cmd.displayNumbers
+        s.gui_cmd_name = s.gui_cmd_type.display
         cb()
 
 
@@ -94,19 +95,19 @@ def subset(cb, cmd, grid_index, grid_name):
             x = part_list[2][1:]
             y = part_list[1][1:]
 
-        sigs.GuiCmd.cmd = sigs.gui_cmd.color
-        sigs.GuiCmd.grid_index = grid_index
+        s.gui_cmd_name = s.gui_cmd_type.color
+        s.color_cmd.index = grid_index
+
         for row in x:
-            sigs.GuiCmd.color = colors.highlight
+            s.color_cmd.color = colors.highlight
             sqr = row + y
-            sigs.GuiCmd.tag = f'BS_{sqr}'
+            s.color_cmd.tag = f'BS_{sqr}'
             cb()
 
             for val in z:
-                sigs.GuiCmd.color = colors.assert_small_square
-                sigs.GuiCmd.tag = f'SS_{sqr}-{val}'
+                s.color_cmd.color = colors.assert_small_square
+                s.color_cmd.tag = f'SS_{sqr}-{val}'
                 cb()
-
         BP
 
     except Exception as e:
@@ -173,18 +174,25 @@ def basic_cmd(cb, from_cmd):
             if retVal is True:
                 cc.base_cmd(cb, cmd)
 
+        if operation == CLR:
+            s.gui_cmd_name = s.gui_cmd_type.restore
+            cb()
+
+            s.gui_cmd_name = s.gui_cmd_type.display
+            cb()
+
         if operation == SET:
             if not basic_cmd_removals(cb, cmd_list):
                 return False # --------------------------------> early fail!
 
         if sigs.step == sigs.steps.major_step:
-            sigs.GuiCmd.cmd = sigs.gui_cmd.wait
+            s.gui_cmd_name = s.gui_cmd_type.wait
             cb()
 
-        sigs.GuiCmd.cmd = sigs.gui_cmd.restoreColors
+        s.gui_cmd_name = s.gui_cmd_type.restore
         cb()
 
-        sigs.GuiCmd.cmd = sigs.gui_cmd.displayNumbers
+        s.gui_cmd_name = s.gui_cmd_type.display
         cb()
 
         return True

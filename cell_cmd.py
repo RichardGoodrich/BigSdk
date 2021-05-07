@@ -15,6 +15,7 @@ from cmd_support import CmdS as c
 import colors
 import settings as g
 import signals as sigs
+import support as s
 # </editor-fold>
 
 # <editor-fold desc="globasl"
@@ -96,14 +97,14 @@ def base_cmd(cb, basic_cmd):
         board.cmd(grid_index, sqr, cell)
         dual_force_handler(cell=cell, cmd=cmd, op=op, sqr=sqr)
 
-        sigs.GuiCmd.cmd = sigs.gui_cmd.grid
-        sigs.GuiCmd.grid_index = grid_index
-        sigs.GuiCmd.square = sqr
-        sigs.GuiCmd.cell = cell
+        s.grid_cmd.index = grid_index
+        s.grid_cmd.square = sqr
+        s.grid_cmd.cell = cell
+        s.gui_cmd_name = s.gui_cmd_type.cmd
         cb()
 
         if sigs.step == sigs.steps.every_step:
-            sigs.GuiCmd.cmd = sigs.gui_cmd.wait
+            s.gui_cmd_name = s.gui_cmd_type.wait
             cb()
 
         return
@@ -202,23 +203,24 @@ def color_cmd(**kwargs):
     sqr = kwargs['sqr']
     val = kwargs['val']
 
-    sigs.GuiCmd.cmd = sigs.gui_cmd.color
-    sigs.GuiCmd.grid_index = grid_index
+    s.gui_cmd_name = s.gui_cmd_type.color
+    s.color_cmd.index = grid_index
+
     if op == SET:
-        sigs.GuiCmd.tag = f'SS_{sqr}'
-        sigs.GuiCmd.color = colors.highlight
+        s.color_cmd.color = colors.highlight
+        s.color_cmd.tag = f'SS_{sqr}'
         cb()
 
-        sigs.GuiCmd.tag = f'BS_{sqr}'
-        sigs.GuiCmd.color = colors.highlight
+        s.color_cmd.tag = f'BS_{sqr}'
         cb()
 
-        sigs.GuiCmd.tag = f'SS_{sqr}-{val}'
-        sigs.GuiCmd.color = colors.assert_small_square
+        s.color_cmd.color = colors.assert_small_square
+        s.color_cmd.tag = f'SS_{sqr}-{val}'
         cb()
+
     elif op == CLR:
-        sigs.GuiCmd.tag = f'SS_{sqr}-{val}'
-        sigs.GuiCmd.color = colors.remove_small_square
+        s.color_cmd.color = colors.remove_small_square
+        s.color_cmd.tag = f'SS_{sqr}-{val}'
         cb()
 
 

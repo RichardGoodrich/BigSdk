@@ -5,6 +5,7 @@ ref: ../notes/root.txt  for paths
 '''
 
 # <editor-fold desc="python imports"
+from dataclasses import dataclass
 import logging as log
 import sys
 import tkinter as tk
@@ -196,7 +197,7 @@ def gui(root):
     grid_list = [rcn, rnc, ncr, bns]
     # </editor-fold>
 
-    def cmd_to_gui(**kwargs):
+    def cmd_to_gui():
         '''
         The only way for business logic to send commands to gui
 
@@ -204,38 +205,41 @@ def gui(root):
         :return:
         '''
         try:
-            cmd = sigs.GuiCmd.cmd
+            name = s.gui_cmd_name
+            cmd_types = s.GuiCmdType()
 
-            if cmd == sigs.gui_cmd.wait:
-                root.wait_variable(next_button_var)
-                next_button_var.set(False)
-                menuBar['bg'] = colors.MENU_BAR_ACTIVE
+            if name == cmd_types.cmd:
+                index = s.grid_cmd.index
+                square = s.grid_cmd.square
+                cell = s.grid_cmd.cell
+
+                grid = grid_list[index]
+                grid.cmd(square, cell)
                 return
 
-            elif cmd == sigs.gui_cmd.color:
-                index = sigs.GuiCmd.grid_index
+            elif name == cmd_types.color:
+                index = s.color_cmd.index
+                color = s.color_cmd.color
+                tag = s.color_cmd.tag
+
                 grid = grid_list[index]
-                color = sigs.GuiCmd.color
-                tag = sigs.GuiCmd.tag
                 grid.color_square(tag, color)
                 return
 
-            elif cmd == sigs.gui_cmd.restoreColors:
-                for grid in grid_list:
-                    grid.color_restore()
-                return
-
-            elif cmd == sigs.gui_cmd.displayNumbers:
+            elif name == cmd_types.display:
                 for grid in grid_list:
                     grid.display_numbers()
                 return
 
-            elif cmd == sigs.gui_cmd.grid:
-                index = sigs.GuiCmd.grid_index
-                grid = grid_list[index]
-                square = sigs.GuiCmd.square
-                cell = sigs.GuiCmd.cell
-                grid.cmd(square, cell)
+            elif name == cmd_types.restore:
+                for grid in grid_list:
+                    grid.color_restore()
+                return
+
+            elif name == cmd_types.wait:
+                root.wait_variable(next_button_var)
+                next_button_var.set(False)
+                menuBar['bg'] = colors.MENU_BAR_ACTIVE
                 return
 
         except Exception as e:
