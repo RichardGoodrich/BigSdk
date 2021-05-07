@@ -10,9 +10,11 @@ import sys
 # </editor-fold>
 
 # <editor-fold desc="local imports"
+import cmds
 import board
 import settings as g
 import signals as sigs
+import support as s
 # </editor-fold>
 
 # <editor-fold desc="logging setup"
@@ -28,11 +30,11 @@ logger_except.addHandler(file_handler_except)
 
 # <editor-fold desc="globals"
 BP = g.BREAK_POINT
-
+CLR = g.OP_CLR
 LIMITS = {2: 3, 3: 5, 4: 6}
 # </editor-fold>
 
-def do():
+def do(cb):
     '''
     Finds Sudoku N2, N3, N4.
 
@@ -40,24 +42,26 @@ def do():
     '''
     try:
         while True:
-            if do_n2():
+            if do_n2(cb):
+                cmds.big_cmd(cb)
                 return True
-            if do_n3():
+            if do_n3(cb):
+                cmds.big_cmd(cb)
                 return True
-            if do_n4():
-                return True
+            if do_n4(cb):
+                cmds.big_cmd(cb)
             return False
 
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
 
-def do_n2():
+def do_n2(cb):
     try:
         for grid_index in range(g.NUMBER_OF_GRIDS):
-            if do_house(grid_index, 'x', 2):
+            if do_house(cb, grid_index, 'x', 2):
                 return True
-            if do_house(grid_index, 'y', 2):
+            if do_house(cb, grid_index, 'y', 2):
                 return True
             return False
 
@@ -65,12 +69,12 @@ def do_n2():
         logger_except.exception(e)
         sys.exit()
 
-def do_n3():
+def do_n3(cb):
     try:
         for grid_index in range(g.NUMBER_OF_GRIDS):
-            if do_house(grid_index, 'x', 3):
+            if do_house(cb, grid_index, 'x', 3):
                 return True
-            if do_house(grid_index, 'y', 3):
+            if do_house(cb, grid_index, 'y', 3):
                 return True
             return False
 
@@ -78,12 +82,12 @@ def do_n3():
         logger_except.exception(e)
         sys.exit()
 
-def do_n4():
+def do_n4(cb):
     try:
         for grid_index in range(g.NUMBER_OF_GRIDS):
-            if do_house(grid_index, 'x', 4):
+            if do_house(cb, grid_index, 'x', 4):
                 return True
-            if do_house(grid_index, 'y', 4):
+            if do_house(cb, grid_index, 'y', 4):
                 return True
             return False
 
@@ -91,7 +95,7 @@ def do_n4():
         logger_except.exception(e)
         sys.exit()
 
-def do_house(grid_index, house_type, size):
+def do_house(cb, grid_index, house_type, size):
     '''
     do_house.
 
@@ -121,13 +125,13 @@ def do_house(grid_index, house_type, size):
                     squares = g.COLS[i]
 
             pencil_marks = [grid[sqr] if grid[sqr][0] in g.DIGITS else '0' for sqr in squares]
-            return do_subset(pencil_marks, size, grid_name, house)
+            return do_subset(cb, pencil_marks, size, grid_name, house)
 
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
 
-def do_subset(members, size, grid, house):
+def do_subset(cb, members, size, grid, house):
     '''
     Finds N digits in N cells exactly.
 
@@ -173,9 +177,8 @@ def do_subset(members, size, grid, house):
                 values = ''.join(values)
                 indices = ''.join(indices)
 
-                # retVal = can_do_set(grid, size, house,
-                #                          members, indices, values)
-                # return retVal
+                retVal = can_do_set(cb, grid, size, house, members, indices, values)
+                return retVal
             BP
         return False
 
@@ -183,7 +186,7 @@ def do_subset(members, size, grid, house):
         logger_except.exception(e)
         sys.exit()
 
-def can_do_set(grid_name, size, house, members, indices, values):
+def can_do_set(cb, grid_name, size, house, members, indices, values):
     try:
         line = members.copy()
         for index in indices:
@@ -194,7 +197,7 @@ def can_do_set(grid_name, size, house, members, indices, values):
         if len(removal_set) == 0:
             return False
         removal_list = list(removal_set)
-        removal_text = Utils.union_to_string([removal_list])
+        removal_text = s.union_to_string([removal_list])
 
         house_type = house[0]
         last_ltr = grid_name[2]
@@ -206,13 +209,41 @@ def can_do_set(grid_name, size, house, members, indices, values):
                           f'{last_ltr}{values}-{house}-' \
                           f'{mid_ltr}{indices}'
 
-                result = self.big_cmd_expansion(big_cmd, line)
+                result = big_cmd_expansion(big_cmd, line)
                 return result
         return False
 
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
+
+def big_cmd_expansion(big_cmd, members):
+    try:
+        value_list = big_cmd.split(' ')
+        last = value_list[-1]
+        part_list = last.split('-')
+        ltr_list = [part_list[0][0], part_list[1][0], part_list[2][0]]
+        num_list = [part_list[0][1:], part_list[1][1:], part_list[2][1:]]
+        cmd_base = f'{ltr_list[1]}{num_list[1]}{ltr_list[2]}'
+        sigs.removal_list = []
+        retVal = False
+        for i, digits in enumerate(members):
+            idx = str(i + 1)
+            if digits != '0':
+                for num in num_list[0]:
+                    if num in digits:
+                        sub = f'{cmd_base}{idx}{CLR}{ltr_list[0]}{num}'
+                        if cmds.can_do_cmd(sub):
+                            sigs.removal_list.append(sub)
+                            sigs.big_cmd = big_cmd
+                            retVal = True
+        sigs.big_cmd = big_cmd
+        return retVal
+
+    except Exception as e:
+        logger_except.exception(e)
+        sys.exit()
+
 
 
 if __name__ == '__main__':

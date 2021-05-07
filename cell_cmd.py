@@ -50,164 +50,176 @@ file_handler_except.setFormatter(formatter_except)
 logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
-class CellCmd:
-    cell = ''
-    cmd = ''
-    df_case = 0
-    df_string = ''
-    df_count = [[], []]
-    grid_index = 0
-    op = ''
-    sqr = ''
-    val = ''
+df_case = 0
+df_count= [[], []]
+df_string = ''
 
-    @classmethod
-    def base_cmd(cls, cb, basic_cmd):
-        '''
-        The single point of contact for writing a new grid value
+def base_cmd(cb, basic_cmd):
+    '''
+    The single point of contact for writing a new grid value
 
-        It there is not an exception simply returns
+    It there is not an exception simply returns
 
-        :param cmd: is basic_cmd  e.g. xXyYOn  O = operation , ADD | CLR | SET
-        :return:
-        '''
-        try:
-            cls.cmd = basic_cmd
-            c.set(cls.cmd)
-            cls.op = c.operation
-            cls.sqr = c.square
-            cls.val = c.value
-            cls.grid_index = c.grid_index
-            cls.cell = board.grid_list[cls.grid_index][cls.sqr]
+    :param cmd: is basic_cmd  e.g. xXyYOn  O = operation , ADD | CLR | SET
+    :return:
+    '''
+    try:
+        cmd = basic_cmd
+        c.set(cmd)
+        op = c.operation
+        sqr = c.square
+        val = c.value
+        grid_index = c.grid_index
+        cell = board.grid_list[grid_index][sqr]
 
-            cls.dual_force_handler()
+        dual_force_handler(cell=cell, cmd=cmd, op=op, sqr=sqr)
 
-            if cls.cell == '':
-                raise Exception(f'cmd = {cls.cmd}, cell = {cls.cell}')
+        if cell == '':
+            raise Exception(f'cmd = {cmd}, cell = {cell}')
 
-            if cls.val not in cls.cell and not sigs.is_grid:
-                raise Exception(f'cmd = {cls.cmd}, '
-                                f'val = {cls.val} not in cell = {cls.cell}')
+        if val not in cell and not sigs.is_grid:
+            raise Exception(f'cmd = {cmd}, '
+                            f'val = {val} not in cell = {cell}')
 
-            if cls.op == CLR:
-                cls.clr_cmd()
-            elif cls.op == SET:
-                cls.set_cmd()
-            elif cls.op == ADD:
-                cls.add_cmd()
+        if op == CLR:
+            cell = clr_cmd(cell=cell, cmd=cmd,
+                           gridIndex=grid_index, sqr=sqr, val=val)
+        elif op == SET:
+            cell = set_cmd(cell, val)
+        elif op == ADD:
+            cell = add_cmd(cell, val)
 
-            if sigs.step != sigs.steps.no_step:
-                cls.color_cmd(cb)
+        if sigs.step != sigs.steps.no_step:
+            color_cmd(cb=cb, gridIndex=grid_index,
+                      op=op, sqr=sqr, val=val)
 
-            board.cmd(cls.grid_index, cls.sqr, cls.cell)
-            cls.dual_force_handler()
+        board.cmd(grid_index, sqr, cell)
+        dual_force_handler(cell=cell, cmd=cmd, op=op, sqr=sqr)
 
-            sigs.GuiCmd.cmd = sigs.gui_cmd.grid
-            sigs.GuiCmd.grid_index = cls.grid_index
-            sigs.GuiCmd.square = cls.sqr
-            sigs.GuiCmd.cell = cls.cell
+        sigs.GuiCmd.cmd = sigs.gui_cmd.grid
+        sigs.GuiCmd.grid_index = grid_index
+        sigs.GuiCmd.square = sqr
+        sigs.GuiCmd.cell = cell
+        cb()
+
+        if sigs.step == sigs.steps.every_step:
+            sigs.GuiCmd.cmd = sigs.gui_cmd.wait
             cb()
 
-            if sigs.step == sigs.steps.every_step:
-                sigs.GuiCmd.cmd = sigs.gui_cmd.wait
-                cb()
+        return
 
-            return
+    except Exception as e:
+        logger_except.exception(e)
+        sys.exit()
 
-        except Exception as e:
-            logger_except.exception(e)
-            sys.exit()
+def add_cmd(cell, val):
+    '''
+    Adds multiple digits to a cell iff a grid is being loaded.
 
-    def add_cmd():
-        '''
-        Adds multiple digits to a cell iff a grid is being loaded.
+    (but loaded one at a time with the ADD operation)
+    and ONLY then when more than one digit is being loaded into a cell.
+    In case of a single digit the normal SET basic_cmd is used.
 
-        (but loaded one at a time with the ADD operation)
-        and ONLY then when more than one digit is being loaded into a cell.
-        In case of a single digit the normal SET basic_cmd is used.
+    Prior to this method being invoked all the grids are loaded with
+    all the DIGITS
 
-        Prior to this method being invoked all the grids are loaded with
-        all the DIGITS
+     assumes CellCmd.is_grid = True
+    :param cell:
+    :param val:
+    :return:
+    '''
 
-         assumes CellCmd.is_grid = True
-        :param cell:
-        :param val:
-        :return:
-        '''
-        try:
-            if CellCmd.cell == g.DIGITS:
-                CellCmd.cell = CellCmd.val
-            else:
-                CellCmd.cell += CellCmd.val
+    if cell == g.DIGITS:
+        cell = val
+    else:
+        cell += val
 
-        except Exception as e:
-            logger_except.exception(e)
-            sys.exit()
+    return cell
 
-    def clr_cmd():
-        try:
-            if CellCmd.cell[0] == g.CELL_GIVEN_MARK:
-                msg_given = f'cmd = {CellCmd.cmd} can NOT erase cell = ' \
-                            f'{CellCmd.cell}. It is a given!'
-                raise Exception(msg_given)
+def clr_cmd(**kwargs):
+    try:
+        cell = kwargs['cell']
+        cmd = kwargs['cmd']
+        grid_index = kwargs['gridIndex']
+        sqr = kwargs['sqr']
+        val = kwargs['val']
 
-            elif CellCmd.cell[0] == g.CELL_SOLVE_MARK:
-                msg_solved = f'cmd = {CellCmd.cmd} can NOT erase cell = ' \
-                             f'{CellCmd.cell}. It is solved!'
-                raise Exception(msg_solved)
+        if cell[0] == g.CELL_GIVEN_MARK:
+            msg_given = f'cmd = {cmd} can NOT erase cell = ' \
+                        f'{cell}. It is a given!'
+            raise Exception(msg_given)
 
-            else:
-                CellCmd.cell = board.grid_list[CellCmd.grid_index][CellCmd.sqr]
-                CellCmd.cell = CellCmd.cell.replace(CellCmd.val, '')
+        elif cell[0] == g.CELL_SOLVE_MARK:
+            msg_solved = f'cmd = {cmd} can NOT erase cell = ' \
+                         f'{cell}. It is solved!'
+            raise Exception(msg_solved)
 
-        except Exception as e:
-            logger_except.exception(e)
-            sys.exit()
+        else:
+            cell = board.grid_list[grid_index][sqr]
+            cell = cell.replace(val, '')
 
-    def set_cmd():
-        try:
-            if sigs.is_load:
-                CellCmd.cell = g.CELL_GIVEN_MARK + CellCmd.val
-            else:
-                CellCmd.cell = g.CELL_SOLVE_MARK + CellCmd.val
+        return cell
 
-        except Exception as e:
-            logger_except.exception(e)
-            sys.exit()
+    except Exception as e:
+        logger_except.exception(e)
+        sys.exit()
 
-    def dual_force_handler():
-        if sigs.is_DF:
-            if CellCmd.op == SET:
-                CellCmd.df_string = f'{L2}cmd = {CellCmd.cmd} sqr = {CellCmd.sqr}' \
-                                 f'  cell = {CellCmd.cell} ->'
-            elif CellCmd.op == CLR:
-                CellCmd.df_string = f'{L2}cmd = {CellCmd.cmd} sqr = {CellCmd.sqr}' \
-                                 f'  cell = {CellCmd.cell} ->'
-            else:
-                CellCmd.df_count[CellCmd.df_case] += 1
-                count = CellCmd.df_count[CellCmd.df_case]
-                CellCmd.df_string += f'{CellCmd.cell} for case {CellCmd.df_case}, ' \
-                                  f'count = {count} '
+def set_cmd(cell, val):
+    if sigs.is_load:
+        cell = g.CELL_GIVEN_MARK + val
+    else:
+        cell = g.CELL_SOLVE_MARK + val
 
-    def color_cmd(cb):
-        sigs.GuiCmd.cmd = sigs.gui_cmd.color
-        sigs.GuiCmd.grid_index = CellCmd.grid_index
-        if CellCmd.op == SET:
-            sigs.GuiCmd.tag = f'SS_{CellCmd.sqr}'
-            sigs.GuiCmd.color = colors.highlight
-            cb()
+    return cell
 
-            sigs.GuiCmd.tag = f'BS_{CellCmd.sqr}'
-            sigs.GuiCmd.color = colors.highlight
-            cb()
+def dual_force_handler(**kwargs):
+    global df_case
+    global df_count
+    global df_string
 
-            sigs.GuiCmd.tag = f'SS_{CellCmd.sqr}-{CellCmd.val}'
-            sigs.GuiCmd.color = colors.assert_small_square
-            cb()
-        elif CellCmd.op == CLR:
-            sigs.GuiCmd.tag = f'SS_{CellCmd.sqr}-{CellCmd.val}'
-            sigs.GuiCmd.color = colors.remove_small_square
-            cb()
+    cell = kwargs['cell']
+    cmd = kwargs['cmd']
+    op = kwargs['op']
+    sqr = kwargs['sqr']
+
+    if sigs.is_DF:
+        if op == SET:
+            df_string = f'{L2}cmd = {cmd} sqr = {sqr}' \
+                             f'  cell = {cell} ->'
+        elif op == CLR:
+            df_string = f'{L2}cmd = {cmd} sqr = {sqr}' \
+                             f'  cell = {cell} ->'
+        else:
+            df_count[df_case] += 1
+            count = df_count[df_case]
+            df_string += f'{cell} for case {df_case}, ' \
+                              f'count = {count} '
+
+def color_cmd(**kwargs):
+    cb = kwargs['cb']
+    grid_index = kwargs['gridIndex']
+    op = kwargs['op']
+    sqr = kwargs['sqr']
+    val = kwargs['val']
+
+    sigs.GuiCmd.cmd = sigs.gui_cmd.color
+    sigs.GuiCmd.grid_index = grid_index
+    if op == SET:
+        sigs.GuiCmd.tag = f'SS_{sqr}'
+        sigs.GuiCmd.color = colors.highlight
+        cb()
+
+        sigs.GuiCmd.tag = f'BS_{sqr}'
+        sigs.GuiCmd.color = colors.highlight
+        cb()
+
+        sigs.GuiCmd.tag = f'SS_{sqr}-{val}'
+        sigs.GuiCmd.color = colors.assert_small_square
+        cb()
+    elif op == CLR:
+        sigs.GuiCmd.tag = f'SS_{sqr}-{val}'
+        sigs.GuiCmd.color = colors.remove_small_square
+        cb()
 
 
 if __name__ == '__main__':

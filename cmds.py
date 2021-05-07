@@ -11,7 +11,7 @@ import sys
 
 # <editor-fold desc="local imports"
 import board
-from cell_cmd import CellCmd as cc
+import cell_cmd as cc
 from cmd_support import CmdS as c
 import colors
 import settings as g
@@ -37,9 +37,9 @@ file_handler_except.setFormatter(formatter_except)
 logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
-def big_cmd(cb, long_cmd):
+def big_cmd(cb):
     try:
-        token_list = long_cmd.split(' ')
+        token_list = sigs.big_cmd.split(' ')
         grid_name = token_list[0]
         type = token_list[1]
         cmd = token_list[3]
@@ -47,12 +47,28 @@ def big_cmd(cb, long_cmd):
 
         if type == 'NS':
             basic_cmd(cb, cmd)
+            return
+
         elif type == 'N2' or type == 'N3' or type == 'N4':
-            subset()
+            subset(cb, cmd, grid_index, grid_name)
         elif type == 'Claim':
-            claim()
+            claim(cb, cmd, grid_name)
         elif type == 'Point':
-            point()
+            point(cb, cmd, grid_name)
+
+        for removal in sigs.removal_list:
+            basic_cmd(cb, removal)
+
+        if sigs.step == sigs.steps.major_step:
+            sigs.GuiCmd.cmd = sigs.gui_cmd.wait
+            cb()
+
+        sigs.GuiCmd.cmd = sigs.gui_cmd.restoreColors
+        cb()
+
+        sigs.GuiCmd.cmd = sigs.gui_cmd.displayNumbers
+        cb()
+
 
     except Exception as e:
         logger_except.exception(e)
@@ -65,21 +81,46 @@ def big_cmd_load(cb, cmd):
         logger_except.exception(e)
         sys.exit()
 
-def subset():
+def subset(cb, cmd, grid_index, grid_name):
+    try:
+        ltr_list = [val for val in cmd if val.isalpha()]
+        part_list = cmd.split('-')
+
+        z = part_list[0][1:]
+        if ltr_list[1] == grid_name[0]:
+            x = part_list[1][1:]
+            y = part_list[2][1:]
+        else:
+            x = part_list[2][1:]
+            y = part_list[1][1:]
+
+        sigs.GuiCmd.cmd = sigs.gui_cmd.color
+        sigs.GuiCmd.grid_index = grid_index
+        for row in x:
+            sigs.GuiCmd.color = colors.highlight
+            sqr = row + y
+            sigs.GuiCmd.tag = f'BS_{sqr}'
+            cb()
+
+            for val in z:
+                sigs.GuiCmd.color = colors.assert_small_square
+                sigs.GuiCmd.tag = f'SS_{sqr}-{val}'
+                cb()
+
+        BP
+
+    except Exception as e:
+        logger_except.exception(e)
+        sys.exit()
+
+def claim(cb, cmd, grid_name):
     try:
         pass
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
 
-def claim():
-    try:
-        pass
-    except Exception as e:
-        logger_except.exception(e)
-        sys.exit()
-
-def point():
+def point(cb, cmd, grid_name):
     try:
         pass
     except Exception as e:
@@ -135,6 +176,10 @@ def basic_cmd(cb, from_cmd):
         if operation == SET:
             if not basic_cmd_removals(cb, cmd_list):
                 return False # --------------------------------> early fail!
+
+        if sigs.step == sigs.steps.major_step:
+            sigs.GuiCmd.cmd = sigs.gui_cmd.wait
+            cb()
 
         sigs.GuiCmd.cmd = sigs.gui_cmd.restoreColors
         cb()
@@ -265,7 +310,7 @@ def rcn_row_expansion(cb, row_block):
             cc.base_cmd(cb, cmdx)
     return True
 
-def rcn_col_expansion(x, col_block):
+def rcn_col_expansion(cb, col_block):
     col_peer = col_block[0]
     blk_peer = col_block[1]
     blk_nums = blk_peer[1:3]
@@ -297,10 +342,10 @@ def rcn_col_expansion(x, col_block):
             sigs.fail_msg = cmdx
             return False  # -------------------------> Fail!
         elif retVal is True:
-            cc.base_cmd(x, cmdx)
+            cc.base_cmd(cb, cmdx)
     return True
 
-def block_only_removals(x):
+def block_only_removals(cb):
     '''
     Block only peer removals in rcn-grid generate removals in rnc & ncr grids.
 
@@ -333,7 +378,7 @@ def block_only_removals(x):
                 if retVal is False:
                     return False  # --------------------------->  Fail!
                 if retVal is True:
-                    cc.base_cmd(x, sub)
+                    cc.base_cmd(cb, sub)
 
         return True
 

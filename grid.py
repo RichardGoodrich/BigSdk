@@ -411,6 +411,7 @@ class Grid(tk.Frame):
             for item in self.color_tag_list:
                 self.canvas.itemconfig(item[0], fill='white')
             self.canvas.update()
+            self.color_tag_list = []
         except Exception as e:
             logger_except.exception(e)
             sys.exit()

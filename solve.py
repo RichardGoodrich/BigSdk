@@ -53,7 +53,7 @@ def all(cb):
                 if is_solved():
                     return
                 continue
-            if solve_subsets.do():
+            if solve_subsets.do(cb):
                 display()
                 if is_solved():
                     return
@@ -82,8 +82,8 @@ def singles(cb):
                     values = grid[square]
                     if len(values) == 1:
                         cmd = s.form_cmd(grid[0], square, SET, values)
-                        long_cmd = f'{grid_name} NS = {cmd}'
-                        cmds.big_cmd(cb, long_cmd)
+                        sigs.big_cmd = f'{grid_name} NS = {cmd}'
+                        cmds.big_cmd(cb)
                         return True
         return False
 

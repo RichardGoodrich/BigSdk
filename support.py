@@ -77,7 +77,7 @@ def grid_name_from_cmd(cmd):
     name = cmd[0] + cmd[2] + cmd[5]
     return name
 
-def intersect_to_string(self, text_list):
+def intersect_to_string(text_list):
     try:
         result = text_list.pop()
         for next in text_list:
@@ -124,11 +124,8 @@ def pause(inp=': '):
     input(inp)
     return inp
 
-def union_to_string(self, text_list):
+def union_to_string(text_list):
     try:
-        if g.IS_LOG_METHOD:
-            logger_methods.info('')
-
         result = text_list.pop()
         for next in text_list:
             result = set(result).union(next)

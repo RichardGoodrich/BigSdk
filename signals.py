@@ -9,6 +9,10 @@ import os
 from collections import namedtuple
 # </editor-fold>
 
+big_cmd = ''
+fail_msg = ''
+removal_list = []
+
 # <editor-fold desc="paths"
 root_path = os.getcwd()
 docs_dir = os.path.join(root_path, 'docs/')
@@ -19,9 +23,6 @@ except_path = os.path.join(logs_dir, 'log_exceptions.txt')
 
 except_format = '%(asctime)s  :%(levelname)s  :%(funcName)s  :%(lineno)d  :%(message)s'
 # </editor-fold>
-
-big_cmd = ''
-fail_msg = ''
 
 # <editor-fold desc="boolean signals (is_)"
 is_DF = False
