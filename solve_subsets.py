@@ -31,7 +31,7 @@ logger_except.addHandler(file_handler_except)
 # <editor-fold desc="globals"
 BP = g.BREAK_POINT
 CLR = g.OP_CLR
-LIMITS = {2: 3, 3: 5, 4: 6}
+LIMITS = {2: 3, 3: 4, 4: 5}
 # </editor-fold>
 
 def do(cb):
@@ -41,6 +41,7 @@ def do(cb):
     :return:  True | False   sigs.big_cmd
     '''
     try:
+        sigs.step = sigs.steps.major_step  # todo hack
         while True:
             if do_n2(cb):
                 cmds.big_cmd(cb)
@@ -209,7 +210,7 @@ def can_do_set(cb, grid_name, size, house, members, indices, values):
                           f'{last_ltr}{values}-{house}-' \
                           f'{mid_ltr}{indices}'
 
-                result = big_cmd_expansion(big_cmd, line)
+                result = big_cmd_expansion(cb, big_cmd, line)
                 return result
         return False
 
@@ -217,7 +218,7 @@ def can_do_set(cb, grid_name, size, house, members, indices, values):
         logger_except.exception(e)
         sys.exit()
 
-def big_cmd_expansion(big_cmd, members):
+def big_cmd_expansion(cb, big_cmd, members):
     try:
         value_list = big_cmd.split(' ')
         last = value_list[-1]

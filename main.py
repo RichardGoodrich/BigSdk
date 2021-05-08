@@ -5,7 +5,6 @@ ref: ../notes/root.txt  for paths
 '''
 
 # <editor-fold desc="python imports"
-from dataclasses import dataclass
 import logging as log
 import sys
 import tkinter as tk
@@ -16,6 +15,7 @@ import board
 import colors
 from grid import Grid
 import puzzle_load
+import settings as g
 import signals as sigs
 import support as s
 import solve
@@ -33,7 +33,7 @@ logger_except.addHandler(file_handler_except)
 # </editor-fold>
 
 # <editor-fold desc="globals"
-
+NL = g.NEW_LINE
 # </editor-fold>
 
 def main():
@@ -231,6 +231,12 @@ def gui(root):
                     grid.display_numbers()
                 return
 
+            elif name == cmd_types.entry:
+                value = s.entry_cmd.entry
+                entry_var.set(value)
+                return
+
+
             elif name == cmd_types.restore:
                 for grid in grid_list:
                     grid.color_restore()
@@ -248,9 +254,20 @@ def gui(root):
 
     cb = cmd_to_gui   # cb for call back
 
+def test_support():
+    print(f'{NL}Testing support.py{NL}')
+
+    print(s.gui_cmd_type)
+
+    print(f'{NL}support Gui Cmd Type defaults:')
+    print(s.grid_cmd)
+    print(s.color_cmd)
+
 if __name__ == '__main__':
     file = __file__
     print(f'running {file} ')
+
+    # test_support()
     main()
 
 

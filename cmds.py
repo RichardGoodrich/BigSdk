@@ -48,7 +48,6 @@ def big_cmd(cb):
 
         if type == 'NS':
             basic_cmd(cb, cmd)
-            return
 
         elif type == 'N2' or type == 'N3' or type == 'N4':
             subset(cb, cmd, grid_index, grid_name)
@@ -61,14 +60,20 @@ def big_cmd(cb):
             basic_cmd(cb, removal)
 
         if sigs.step == sigs.steps.major_step:
+            s.entry_cmd.entry = sigs.big_cmd
+            s.gui_cmd_name = s.gui_cmd_type.entry
+            cb()
+
             s.gui_cmd_name = s.gui_cmd_type.wait
             cb()
+
 
         s.gui_cmd_name = s.gui_cmd_type.restore
         cb()
 
         s.gui_cmd_name = s.gui_cmd_type.display
         cb()
+        BP
 
 
     except Exception as e:
@@ -78,6 +83,17 @@ def big_cmd(cb):
 def big_cmd_load(cb, cmd):
     try:
         basic_cmd(cb, cmd)
+
+        if sigs.step == sigs.steps.major_step:
+            s.gui_cmd_name = s.gui_cmd_type.wait
+            cb()
+
+        s.gui_cmd_name = s.gui_cmd_type.restore
+        cb()
+
+        s.gui_cmd_name = s.gui_cmd_type.display
+        cb()
+
     except Exception as e:
         logger_except.exception(e)
         sys.exit()
@@ -174,26 +190,10 @@ def basic_cmd(cb, from_cmd):
             if retVal is True:
                 cc.base_cmd(cb, cmd)
 
-        if operation == CLR:
-            s.gui_cmd_name = s.gui_cmd_type.restore
-            cb()
-
-            s.gui_cmd_name = s.gui_cmd_type.display
-            cb()
-
         if operation == SET:
             if not basic_cmd_removals(cb, cmd_list):
                 return False # --------------------------------> early fail!
 
-        if sigs.step == sigs.steps.major_step:
-            s.gui_cmd_name = s.gui_cmd_type.wait
-            cb()
-
-        s.gui_cmd_name = s.gui_cmd_type.restore
-        cb()
-
-        s.gui_cmd_name = s.gui_cmd_type.display
-        cb()
 
         return True
 

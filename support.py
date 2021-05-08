@@ -18,7 +18,6 @@ import sys
 # </editor-fold>
 
 # <editor-fold desc="local imports"
-import settings as g
 import signals as sigs
 # </editor-fold>
 
@@ -36,39 +35,82 @@ logger_except.addHandler(file_handler_except)
 # <editor-fold desc="globals"
 # </editor-fold>
 
-
-
+# <editor-fold desc="Gui callback cmds"
 @dataclass
 class GuiCmdType:
     cmd: str = 'cmd'
+    entry: str = 'entry'
     color: str = 'color'
     display: str = 'display'
+    lift: str = 'lift'
     restore: str = 'restore'
     wait: str = 'wait'
 
 
 @dataclass
 class ColorCmd:
-    cmd: str = 'color'
-    index: int = 0
+    '''
+    Non-valid defaults intentionally!
+
+    No default values causes failure to load!
+    Hard discovery that a valid value and cause things to work!  Hopefully the default
+    values won't be valid!  If so could intentionally put in-valid values there.
+    todo - 2021.05.07 is that this needs tested!
+    '''
+    name: str = 'color'
+    index: int = 9
     color: str = ''
     tsg: str = ''
 
+@dataclass
+class EntryCmd:
+    '''
+    Non-valid defaults intentionally!
+
+    No default values causes failure to load!
+    Hard discovery that a valid value and cause things to work!  Hopefully the default
+    values won't be valid!  If so could intentionally put in-valid values there.
+    todo - 2021.05.07 is that this needs tested!
+    '''
+    name: str = 'color'
+    entry: str = ''
+
+@dataclass
+class LiftCmd:
+    '''
+    Non-valid defaults intentionally!
+
+    No default values causes failure to load!
+    Hard discovery that a valid value and cause things to work!  Hopefully the default
+    values won't be valid!  If so could intentionally put in-valid values there.
+    todo - 2021.05.07 is that this needs tested!
+    '''
+    name: str = 'lift'
+    index: int = 9
 
 @dataclass
 class GridCmd:
-    cmd: str = 'cmd'
-    index: int = 0
-    square: str = '11'
+    '''
+    Non-valid defaults intentionally!
+
+    No default values causes failure to load!
+    Hard discovery that a valid value and cause things to work!  Hopefully the default
+    values won't be valid!  If so could intentionally put in-valid values there.
+    todo - 2021.05.07 is that this needs tested!
+    '''
+    name: str = 'cmd'
+    index: int = 9
+    square: str = ''
     cell: str = ''
 
 gui_cmd_type = GuiCmdType()
 gui_cmd_name = gui_cmd_type.wait
 
+entry_cmd = EntryCmd()
+lift_cmd = LiftCmd()
 grid_cmd = GridCmd()
 color_cmd = ColorCmd()
-
-
+# </editor-fold>
 
 def convert_bsrc(value):
     try:
@@ -175,31 +217,11 @@ def union_to_string(text_list):
         logger_except.exception(e)
         sys.exit()
 
-if __name__ == '__main__':
-    file = __file__
-    print(f'{file} is being run')
-
-    result = deconstruct_cmd('r1c2=n3')
-    grid = result.grid
-    op = result.op
-    row = result.row
-    col = result.col
-    val = result.val
-    print(f'{g.NL}{grid} {row}{col}{op}{val}{g.NL}')
-
-    cmd = form_cmd(grid, row + col, op, val)
-    print(f'cmd = {cmd}{g.NL}')
-
-    grid_name = grid_name_from_cmd(cmd)
-    print(f'grid name = {grid_name}{g.NL}')
-
-    retVal = pause('Input: ')
-    print(f'return = {retVal}')
-
 
 if __name__ == '__main__':
     file = __file__
     print(f'running {file} ')
+
 else:
     file = __file__
     print(f'importing {file} ')
