@@ -1,0 +1,508 @@
+Daily.txt  for PyCharm BigSdk project
+
+/home/Big/Dropbox/root/private/computer/software
+/PyCharm/BigSdk/notes/daily.txt
+
+2021-05-07 Fri
+----------------------------------------------------
+  I lost these yesterday somehow and not able to recover!?
+
+  So starting fresh today
+
+  Made a git commit of changes for solve_subset.py
+  and refactor of cell_cmd.py from a class to
+  a simple module.  Using **kwargs made that practical
+
+  Now want to experimeng with @dataclass for some refactoring
+  (will do in snippets project first)
+
+  I think the main fix for proper coloring for solve_subsets()
+  is that in:  basic_cmd(cb, from_cmd)
+
+  right after removals in top part of this function
+  and removals in bottom section associated with SET commands
+  is to do the selective "restore" and "display numbers"
+
+  Also on coloring due to all these "big cmds" - that is
+  everything except puzzle loading and NS (naked singles)
+  want to add assertion coloring to all grids
+
+  and probably need list creation using zip to apply
+  data to a map function?
+
+  ALSO: want to add bg coloring to grid in focus
+
+  This was my last commit
+  commit c94ba719f0a897e230353048cea52d9abd0afd9b (HEAD -> master)
+    Author: Richard Goodrich <richardgoodrich@gmail.com>
+    Date:   Fri May 7 15:20:19 2021 -0700
+    Refactor to use @dataclass to handle call back to gui.
+
+
+    from cell_cmd.big_cmd(cb)  about line 100 and following have this:
+
+        s.grid_cmd.index = grid_index
+        s.grid_cmd.square = sqr             <--- was s.grid_cmd.sqr = sqr
+        s.grid_cmd.cell = cell
+        s.gui_cmd_name = s.gui_cmd_type.cmd
+        cb()
+
+    However, last bad bug had before getting puzzle loadin working and solving singles
+    and some solve_subsets was a @dataclasss issue in support.py  Even though
+    PyCharm prompts you with the correct choices for s.grid_cmd.*  where the * is
+    it still allows you to type the wrong thing.  I typed 'sqr' instead of 'square'
+    and since the default configuration for gui_cmd.square was '11'  the square
+    never changed.  pyCharm tends to complain if you only init some of the attributes,
+    bu knowing this I think it would be good to init those fields with 'non-valid'
+    values that will hopefully cause exceptions in future.  Doing that now ....
+
+    2021-05-08-Sat
+    ---------------------------------------------------------------------------------
+    Made this commit:
+
+    commit 17ea336fbb638724c763c7d0bf673ba47ea4193b (HEAD -> master)
+    Author: Richard Goodrich <richardgoodrich@gmail.com>
+    Date:   Sat May 8 14:49:27 2021 -0700
+
+    Added entry_cmd and lift_cmd to callback logic.  Fixed wait logic,
+    added non-valid default values to dataclass,
+    and some tweaks to solve_subsets.py
+
+    1453:  stopping  programming now!
+
+    2021-05-10-Sun
+    ---------------------------------------------------------------------------------
+    github:
+    https://github.com/RichardGoodrich
+
+    repository
+    https://github.com/RichardGoodrich/BigSdk
+
+    git remote add origin https://github.com/RichardGoodrich/BigSdk
+
+    >git status
+    On branch master
+    nothing to commit, working tree clean
+
+    1245:
+    >git remote add origin https://github.com/RichardGoodrich/BigSdk
+    >git remote -v
+    origin	https://github.com/RichardGoodrich/BigSdk (fetch)
+    origin	https://github.com/RichardGoodrich/BigSdk (push)
+    >
+
+    >git push origin master
+    Username for 'https://github.com': RichardGoodrich
+    Password for 'https://RichardGoodrich@github.com':
+    Enumerating objects: 69, done.
+    Counting objects: 100% (69/69), done.
+    Delta compression using up to 4 threads
+    Compressing objects: 100% (68/68), done.
+    Writing objects: 100% (69/69), 85.60 KiB | 2.67 MiB/s, done.
+    Total 69 (delta 39), reused 0 (delta 0)
+    remote: Resolving deltas: 100% (39/39), done.
+    remote:
+    remote: Create a pull request for 'master' on GitHub by visiting:
+    remote:      https://github.com/RichardGoodrich/BigSdk/pull/new/master
+    remote: 
+    To https://github.com/RichardGoodrich/BigSdk
+     * [new branch]      master -> master
+    >
+    1250
+
+    >git clone https://github.com/RichardGoodrich/BigSdk
+
+    solve_subsets.do()  line 44  KEY statement to turn major_step on if not commented out
+
+    2021-05-12 Wed
+    ------------------------------------------------------------------
+    stopping at solve_subset line 133  this do_n3 case
+    there is error in logic in do_house  should not go to pencil_mark
+    creation if does not take if or elif branch
+
+    looking to find the N3 in rcn r4 r4c189n239
+
+    Tired and going to bred it is 2044
+
+  2021-05-14 Fri
+    ------------------------------------------------------------------
+    cmds.point(cb, cmd, grid_name)  line 140
+
+    cmd = 'n9b5r6',  grid_name = 'rcn'
+
+    1918:  used Rev-4 as model to set up all the other puzzle load
+    options.
+
+    copied puzzles.py from  Rev-4
+
+    to main around line 115 inserted calls to puzzle_load.py
+    ----------------------------------------------------------
+    def load_grids():
+        s.is_grid_set(True)
+        puzzle_load.get_grid(cb)  <--------------------------
+        s.is_grid_set(False)
+
+    def load_81_char_strings():
+        s.is_load_set(True)
+        puzzle_load.string_81(cb)  <-------------------------
+        s.is_load_set(False)
+
+    -------------------------------------
+    added to bottom of puzzle_load.py
+
+        # <editor-fold desc="puzzle menu loads"
+            def string_81(cb):
+            def get_grid(cb):
+            def get_puzzle_grid():
+            def get_puzzle_string():
+        # </editor-fold>
+
+
+    else:
+        file = __file__
+        print(f'importing {file} ')
+        get_puzzle_grid()
+        get_puzzle_string()
+    --------------------------------------
+
+
+    1936: stopping for day
+          have not even begun to debug!
+
+  2021-05-22-Sat
+    ------------------------------------------------------------------
+    Got Load Grids working and working on GRID_Claim_B%
+    leaving off in cmds.claim()  line 160
+    line 170 specificallly to color the pattern
+
+    did git commit
+
+    1915 quit time.
+
+  2021-05-25-Tue
+    ------------------------------------------------------------------
+    main.entry_cmd about line 208 needs fleshed out.
+
+  2021-05-27-Thu ------------------------------------------------
+    started solve_dual_force.py
+    then fleshed out main.toggle_* stuff
+    coloring lifted grid
+    (learn to enumerate in reverse)
+    left off in main.toggle_all  line 67
+
+  2021-05-28-Fri ------------------------------------------------
+    0958 - starting
+    1724-by  corrected active grid bg coloring by two tweaks in
+    grid.py to keep canvas['bg']  color from 'bleeding' through:
+
+    grid.draw_big_squares()  'state' : 'hidden' to 'normal'
+        data = {'activefill': 'cyan', 'fill': 'white', 'state': 'normal', 'width': 0}
+    grid.display_numbers()  state='hidden' to state='normal'
+         else:
+          self.canvas.itemconfig(small_square, state='normal')
+
+    in cmds.big_cmd(cb)   added this logic:
+       to highlight the grid where a pattern is found:
+
+        if grid_index != sigs.is_lifted_index and sigs.step != sigs.steps.no_step:
+            s.gui_cmd_name = s.gui_cmd_type.lift
+            s.lift_cmd.index = grid_index
+            cb()
+
+  Also started work on solve_dual_force()
+     my model from previous code is in Rev-4 board.solve_dual_force() ~line 1043
+
+  1846: Stop Work at cmds.ual_force(cb, cmd_list)   line 269
+        cmd = cmd = 'r1c2=n1'
+        ref:  scratch.txt
+
+  2021-06-01-Tue-0943 ------------------------------------------------
+
+  OK, ready to figure out which color pairs for DF
+
+  sigs.is_DF = True is key signal
+  sigs.df_case = 0 | 1
+
+  colors.remove_small_square = 'red'
+  colors.assert_small_square = 'green'
+
+  green = assertion both agree on
+  red   = removal   both agree on
+
+ready for DF
+.------------.-----------------.---------------.
+| 5   19   4 | 139  139  6     | 2    7    8   |
+| 8   169  3 | 2    179  17    | 4    5    69  |
+| 2   69   7 | 5    4    8     | 69   3    1   |
+:------------+-----------------+---------------:
+| 1   23   8 | 47   6    47    | 5    29   239 |
+| 9   7    5 | 8    13   2     | 13   6    4   |
+| 4   23   6 | 19   159  135   | 8    12   7   |
+:------------+-----------------+---------------:
+| 6   4    1 | 37   2    9     | 37   8    5   |
+| 37  8    9 | 147  157  13457 | 167  124  236 |
+| 37  5    2 | 6    8    1347  | 179  149  39  |
+'------------'-----------------'---------------'
+
+
+  2041  Quitting - r8c2=n2 Fails when try tp remove r8c9-n2
+        ref cmds.py  line 69  Now what to do about it!
+
+  2021-06-02-Wed------------------------------------------------
+
+  bp cmds.py  line 68
+
+  2021-06-05-Sat------------------------------------------------
+
+  couple of git commits since wrote last
+
+  main.entry_cmd() else clause  (lines 228-232) added to
+  load a grid.  Needs examined more concerning these two
+  signals:  (should not need both!0
+            sigs.is_grid = True
+            sigs.is_grid_choose = True
+
+  two other issues - way to load no digits into grids
+  and either way to copy grids to a save or
+     reset grid to initial state
+     for use in solve_dual_force.py
+
+PTL about 1635  DF Ran correctly for first time.   I was then working on the Finiish
+Mathematician puzzle and got this:
+
+
+DualForceType(is_Fail=False, case=0, df_cmd='rcn DF = n39-r8-c7', cmd_1='r8c7=n3', cmd_2='r8c7=n9', count_1=22, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c79-r6-n5', cmd_1='r6n5=c7', cmd_2='r6n5=c9', count_1=23, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c13-r6-n7', cmd_1='r6n7=c1', cmd_2='r6n7=c3', count_1=25, count_2=22)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c17-r7-n5', cmd_1='r7n5=c1', cmd_2='r7n5=c7', count_1=22, count_2=24)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c56-r9-n1', cmd_1='r9n1=c5', cmd_2='r9n1=c6', count_1=22, count_2=23)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r12-n5-c5', cmd_1='n5c5=r1', cmd_2='n5c5=r2', count_1=22, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r69-n7-c3', cmd_1='n7c3=r6', cmd_2='n7c3=r9', count_1=22, count_2=27)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r56-n8-c2', cmd_1='n8c2=r5', cmd_2='n8c2=r6', count_1=22, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s34-b1-n9', cmd_1='b1n9=s3', cmd_2='b1n9=s4', count_1=22, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s25-b2-n5', cmd_1='b2n5=s2', cmd_2='b2n5=s5', count_1=22, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s79-b4-n7', cmd_1='b4n7=s7', cmd_2='b4n7=s9', count_1=25, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s58-b4-n8', cmd_1='b4n8=s5', cmd_2='b4n8=s8', count_1=22, count_2=22)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s79-b6-n5', cmd_1='b6n5=s7', cmd_2='b6n5=s9', count_1=23, count_2=22)
+
+
+default case
+
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n19-r1-c2', cmd_1='r1c2=n1', cmd_2='r1c2=n9', count_1=47, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n17-r2-c6', cmd_1='r2c6=n1', cmd_2='r2c6=n7', count_1=49, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n69-r2-c9', cmd_1='r2c9=n6', cmd_2='r2c9=n9', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n69-r3-c2', cmd_1='r3c2=n6', cmd_2='r3c2=n9', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n69-r3-c7', cmd_1='r3c7=n6', cmd_2='r3c7=n9', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n23-r4-c2', cmd_1='r4c2=n2', cmd_2='r4c2=n3', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n47-r4-c4', cmd_1='r4c4=n4', cmd_2='r4c4=n7', count_1=51, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n47-r4-c6', cmd_1='r4c6=n4', cmd_2='r4c6=n7', count_1=71, count_2=51)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n29-r4-c8', cmd_1='r4c8=n2', cmd_2='r4c8=n9', count_1=70, count_2=47)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n13-r5-c5', cmd_1='r5c5=n1', cmd_2='r5c5=n3', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n13-r5-c7', cmd_1='r5c7=n1', cmd_2='r5c7=n3', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n23-r6-c2', cmd_1='r6c2=n2', cmd_2='r6c2=n3', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n19-r6-c4', cmd_1='r6c4=n1', cmd_2='r6c4=n9', count_1=53, count_2=47)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n12-r6-c8', cmd_1='r6c8=n1', cmd_2='r6c8=n2', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n37-r7-c4', cmd_1='r7c4=n3', cmd_2='r7c4=n7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n37-r7-c7', cmd_1='r7c7=n3', cmd_2='r7c7=n7', count_1=81, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='rcn DF = n37-r8-c1', cmd_1='r8c1=n3', cmd_2='r8c1=n7', count_1=48, count_2=58)
+DualForceType(is_Fail=False, case=0, df_cmd='rcn DF = n37-r9-c1', cmd_1='r9c1=n3', cmd_2='r9c1=n7', count_1=58, count_2=48)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n39-r9-c9', cmd_1='r9c9=n3', cmd_2='r9c9=n9', count_1=73, count_2=52)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c45-r1-n3', cmd_1='r1n3=c4', cmd_2='r1n3=c5', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c29-r2-n6', cmd_1='r2n6=c2', cmd_2='r2n6=c9', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c56-r2-n7', cmd_1='r2n7=c5', cmd_2='r2n7=c6', count_1=49, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c27-r3-n6', cmd_1='r3n6=c2', cmd_2='r3n6=c7', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c27-r3-n9', cmd_1='r3n9=c2', cmd_2='r3n9=c7', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c29-r4-n3', cmd_1='r4n3=c2', cmd_2='r4n3=c9', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c46-r4-n4', cmd_1='r4n4=c4', cmd_2='r4n4=c6', count_1=51, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c46-r4-n7', cmd_1='r4n7=c4', cmd_2='r4n7=c6', count_1=71, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c89-r4-n9', cmd_1='r4n9=c8', cmd_2='r4n9=c9', count_1=47, count_2=70)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c57-r5-n1', cmd_1='r5n1=c5', cmd_2='r5n1=c7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c57-r5-n3', cmd_1='r5n3=c5', cmd_2='r5n3=c7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c28-r6-n2', cmd_1='r6n2=c2', cmd_2='r6n2=c8', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c26-r6-n3', cmd_1='r6n3=c2', cmd_2='r6n3=c6', count_1=81, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c56-r6-n5', cmd_1='r6n5=c5', cmd_2='r6n5=c6', count_1=49, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c45-r6-n9', cmd_1='r6n9=c4', cmd_2='r6n9=c5', count_1=47, count_2=51)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c47-r7-n3', cmd_1='r7n3=c4', cmd_2='r7n3=c7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c47-r7-n7', cmd_1='r7n7=c4', cmd_2='r7n7=c7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c89-r8-n2', cmd_1='r8n2=c8', cmd_2='r8n2=c9', count_1=73, count_2=51)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c56-r8-n5', cmd_1='r8n5=c5', cmd_2='r8n5=c6', count_1=81, count_2=49)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c79-r8-n6', cmd_1='r8n6=c7', cmd_2='r8n6=c9', count_1=50, count_2=64)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c68-r9-n4', cmd_1='r9n4=c6', cmd_2='r9n4=c8', count_1=59, count_2=48)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r12-n1-c2', cmd_1='n1c2=r1', cmd_2='n1c2=r2', count_1=47, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r46-n2-c2', cmd_1='n2c2=r4', cmd_2='n2c2=r6', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r48-n2-c9', cmd_1='n2c9=r4', cmd_2='n2c9=r8', count_1=72, count_2=51)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r89-n3-c1', cmd_1='n3c1=r8', cmd_2='n3c1=r9', count_1=48, count_2=58)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r46-n3-c2', cmd_1='n3c2=r4', cmd_2='n3c2=r6', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r17-n3-c4', cmd_1='n3c4=r1', cmd_2='n3c4=r7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r15-n3-c5', cmd_1='n3c5=r1', cmd_2='n3c5=r5', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r57-n3-c7', cmd_1='n3c7=r5', cmd_2='n3c7=r7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r48-n4-c4', cmd_1='n4c4=r4', cmd_2='n4c4=r8', count_1=51, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r89-n4-c8', cmd_1='n4c8=r8', cmd_2='n4c8=r9', count_1=59, count_2=48)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r68-n5-c5', cmd_1='n5c5=r6', cmd_2='n5c5=r8', count_1=49, count_2=81)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r68-n5-c6', cmd_1='n5c6=r6', cmd_2='n5c6=r8', count_1=81, count_2=49)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r23-n6-c2', cmd_1='n6c2=r2', cmd_2='n6c2=r3', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r38-n6-c7', cmd_1='n6c7=r3', cmd_2='n6c7=r8', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r28-n6-c9', cmd_1='n6c9=r2', cmd_2='n6c9=r8', count_1=50, count_2=64)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r89-n7-c1', cmd_1='n7c1=r8', cmd_2='n7c1=r9', count_1=58, count_2=48)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r28-n7-c5', cmd_1='n7c5=r2', cmd_2='n7c5=r8', count_1=49, count_2=72)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r16-n9-c4', cmd_1='n9c4=r1', cmd_2='n9c4=r6', count_1=50, count_2=47)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r39-n9-c7', cmd_1='n9c7=r3', cmd_2='n9c7=r9', count_1=50, count_2=62)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r49-n9-c8', cmd_1='n9c8=r4', cmd_2='n9c8=r9', count_1=47, count_2=69)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s25-b1-n1', cmd_1='b1n1=s2', cmd_2='b1n1=s5', count_1=47, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s58-b1-n6', cmd_1='b1n6=s5', cmd_2='b1n6=s8', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s12-b2-n3', cmd_1='b2n3=s1', cmd_2='b2n3=s2', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s56-b2-n7', cmd_1='b2n7=s5', cmd_2='b2n7=s6', count_1=49, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s67-b3-n6', cmd_1='b3n6=s6', cmd_2='b3n6=s7', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s67-b3-n9', cmd_1='b3n9=s6', cmd_2='b3n9=s7', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s28-b4-n2', cmd_1='b4n2=s2', cmd_2='b4n2=s8', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s28-b4-n3', cmd_1='b4n3=s2', cmd_2='b4n3=s8', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s59-b5-n3', cmd_1='b5n3=s5', cmd_2='b5n3=s9', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s13-b5-n4', cmd_1='b5n4=s1', cmd_2='b5n4=s3', count_1=51, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s89-b5-n5', cmd_1='b5n5=s8', cmd_2='b5n5=s9', count_1=49, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s13-b5-n7', cmd_1='b5n7=s1', cmd_2='b5n7=s3', count_1=71, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s78-b5-n9', cmd_1='b5n9=s7', cmd_2='b5n9=s8', count_1=47, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s48-b6-n1', cmd_1='b6n1=s4', cmd_2='b6n1=s8', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s34-b6-n3', cmd_1='b6n3=s3', cmd_2='b6n3=s4', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s23-b6-n9', cmd_1='b6n9=s2', cmd_2='b6n9=s3', count_1=47, count_2=70)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s47-b7-n3', cmd_1='b7n3=s4', cmd_2='b7n3=s7', count_1=48, count_2=58)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s47-b7-n7', cmd_1='b7n7=s4', cmd_2='b7n7=s7', count_1=58, count_2=48)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s56-b8-n5', cmd_1='b8n5=s5', cmd_2='b8n5=s6', count_1=81, count_2=49)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s56-b9-n2', cmd_1='b9n2=s5', cmd_2='b9n2=s6', count_1=73, count_2=51)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s58-b9-n4', cmd_1='b9n4=s5', cmd_2='b9n4=s8', count_1=59, count_2=48)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s46-b9-n6', cmd_1='b9n6=s4', cmd_2='b9n6=s6', count_1=50, count_2=64)
+
+
+  2021-06-07-Mon------------------------------------------------
+  1346:  quit at 1832  solve_dual_force.sort() line 187
+
+
+  next make fail_list and get min count to failure and
+  max count hopefully to solve
+
+  sort it by shortest count to failue
+  and then by grid_index f
+
+  2021-06-08-Tue------------------------------------------------
+  0650
+
+  1005:
+
+  max_list
+==================================================
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n23-r4-c2', square='42', cmd_1='r4c2=n2', cmd_2='r4c2=n3', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n13-r5-c5', square='55', cmd_1='r5c5=n1', cmd_2='r5c5=n3', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n13-r5-c7', square='57', cmd_1='r5c7=n1', cmd_2='r5c7=n3', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n23-r6-c2', square='62', cmd_1='r6c2=n2', cmd_2='r6c2=n3', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n12-r6-c8', square='68', cmd_1='r6c8=n1', cmd_2='r6c8=n2', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n37-r7-c4', square='74', cmd_1='r7c4=n3', cmd_2='r7c4=n7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n37-r7-c7', square='77', cmd_1='r7c7=n3', cmd_2='r7c7=n7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c45-r1-n3', square='13', cmd_1='r1n3=c4', cmd_2='r1n3=c5', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c29-r4-n3', square='43', cmd_1='r4n3=c2', cmd_2='r4n3=c9', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c57-r5-n1', square='51', cmd_1='r5n1=c5', cmd_2='r5n1=c7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c57-r5-n3', square='53', cmd_1='r5n3=c5', cmd_2='r5n3=c7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c28-r6-n2', square='62', cmd_1='r6n2=c2', cmd_2='r6n2=c8', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c26-r6-n3', square='63', cmd_1='r6n3=c2', cmd_2='r6n3=c6', count_1=81, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c56-r6-n5', square='65', cmd_1='r6n5=c5', cmd_2='r6n5=c6', count_1=49, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c47-r7-n3', square='73', cmd_1='r7n3=c4', cmd_2='r7n3=c7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c47-r7-n7', square='77', cmd_1='r7n7=c4', cmd_2='r7n7=c7', count_1=81, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='rnc DF = c56-r8-n5', square='85', cmd_1='r8n5=c5', cmd_2='r8n5=c6', count_1=81, count_2=49)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r46-n2-c2', square='22', cmd_1='n2c2=r4', cmd_2='n2c2=r6', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r46-n3-c2', square='32', cmd_1='n3c2=r4', cmd_2='n3c2=r6', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r17-n3-c4', square='34', cmd_1='n3c4=r1', cmd_2='n3c4=r7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r15-n3-c5', square='35', cmd_1='n3c5=r1', cmd_2='n3c5=r5', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r57-n3-c7', square='37', cmd_1='n3c7=r5', cmd_2='n3c7=r7', count_1=71, count_2=81)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r68-n5-c5', square='55', cmd_1='n5c5=r6', cmd_2='n5c5=r8', count_1=49, count_2=81)
+DualForceType(is_Fail=False, case=0, df_cmd='ncr DF = r68-n5-c6', square='56', cmd_1='n5c6=r6', cmd_2='n5c6=r8', count_1=81, count_2=49)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s12-b2-n3', square='23', cmd_1='b2n3=s1', cmd_2='b2n3=s2', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s28-b4-n2', square='42', cmd_1='b4n2=s2', cmd_2='b4n2=s8', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s28-b4-n3', square='43', cmd_1='b4n3=s2', cmd_2='b4n3=s8', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s59-b5-n3', square='53', cmd_1='b5n3=s5', cmd_2='b5n3=s9', count_1=81, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s89-b5-n5', square='55', cmd_1='b5n5=s8', cmd_2='b5n5=s9', count_1=49, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s48-b6-n1', square='61', cmd_1='b6n1=s4', cmd_2='b6n1=s8', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s34-b6-n3', square='63', cmd_1='b6n3=s3', cmd_2='b6n3=s4', count_1=81, count_2=71)
+DualForceType(is_Fail=False, case=0, df_cmd='bns DF = s56-b8-n5', square='85', cmd_1='b8n5=s5', cmd_2='b8n5=s6', count_1=81, count_2=49)
+
+fails
+==================================================
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n19-r1-c2', square='12', cmd_1='r1c2=n1', cmd_2='r1c2=n9', count_1=47, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n17-r2-c6', square='26', cmd_1='r2c6=n1', cmd_2='r2c6=n7', count_1=49, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n69-r2-c9', square='29', cmd_1='r2c9=n6', cmd_2='r2c9=n9', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n69-r3-c2', square='32', cmd_1='r3c2=n6', cmd_2='r3c2=n9', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n69-r3-c7', square='37', cmd_1='r3c7=n6', cmd_2='r3c7=n9', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n23-r4-c2', square='42', cmd_1='r4c2=n2', cmd_2='r4c2=n3', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n47-r4-c4', square='44', cmd_1='r4c4=n4', cmd_2='r4c4=n7', count_1=51, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n47-r4-c6', square='46', cmd_1='r4c6=n4', cmd_2='r4c6=n7', count_1=71, count_2=51)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n29-r4-c8', square='48', cmd_1='r4c8=n2', cmd_2='r4c8=n9', count_1=70, count_2=47)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n13-r5-c5', square='55', cmd_1='r5c5=n1', cmd_2='r5c5=n3', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n13-r5-c7', square='57', cmd_1='r5c7=n1', cmd_2='r5c7=n3', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n23-r6-c2', square='62', cmd_1='r6c2=n2', cmd_2='r6c2=n3', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n19-r6-c4', square='64', cmd_1='r6c4=n1', cmd_2='r6c4=n9', count_1=53, count_2=47)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n12-r6-c8', square='68', cmd_1='r6c8=n1', cmd_2='r6c8=n2', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n37-r7-c4', square='74', cmd_1='r7c4=n3', cmd_2='r7c4=n7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rcn DF = n37-r7-c7', square='77', cmd_1='r7c7=n3', cmd_2='r7c7=n7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rcn DF = n39-r9-c9', square='99', cmd_1='r9c9=n3', cmd_2='r9c9=n9', count_1=73, count_2=52)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c45-r1-n3', square='13', cmd_1='r1n3=c4', cmd_2='r1n3=c5', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c29-r2-n6', square='26', cmd_1='r2n6=c2', cmd_2='r2n6=c9', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c56-r2-n7', square='27', cmd_1='r2n7=c5', cmd_2='r2n7=c6', count_1=49, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c27-r3-n6', square='36', cmd_1='r3n6=c2', cmd_2='r3n6=c7', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c27-r3-n9', square='39', cmd_1='r3n9=c2', cmd_2='r3n9=c7', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c29-r4-n3', square='43', cmd_1='r4n3=c2', cmd_2='r4n3=c9', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c46-r4-n4', square='44', cmd_1='r4n4=c4', cmd_2='r4n4=c6', count_1=51, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c46-r4-n7', square='47', cmd_1='r4n7=c4', cmd_2='r4n7=c6', count_1=71, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c89-r4-n9', square='49', cmd_1='r4n9=c8', cmd_2='r4n9=c9', count_1=47, count_2=70)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c57-r5-n1', square='51', cmd_1='r5n1=c5', cmd_2='r5n1=c7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c57-r5-n3', square='53', cmd_1='r5n3=c5', cmd_2='r5n3=c7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c28-r6-n2', square='62', cmd_1='r6n2=c2', cmd_2='r6n2=c8', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c26-r6-n3', square='63', cmd_1='r6n3=c2', cmd_2='r6n3=c6', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c45-r6-n9', square='69', cmd_1='r6n9=c4', cmd_2='r6n9=c5', count_1=47, count_2=51)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c47-r7-n3', square='73', cmd_1='r7n3=c4', cmd_2='r7n3=c7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c47-r7-n7', square='77', cmd_1='r7n7=c4', cmd_2='r7n7=c7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='rnc DF = c89-r8-n2', square='82', cmd_1='r8n2=c8', cmd_2='r8n2=c9', count_1=73, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='rnc DF = c79-r8-n6', square='86', cmd_1='r8n6=c7', cmd_2='r8n6=c9', count_1=50, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r12-n1-c2', square='12', cmd_1='n1c2=r1', cmd_2='n1c2=r2', count_1=47, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r46-n2-c2', square='22', cmd_1='n2c2=r4', cmd_2='n2c2=r6', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r48-n2-c9', square='29', cmd_1='n2c9=r4', cmd_2='n2c9=r8', count_1=72, count_2=51)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r46-n3-c2', square='32', cmd_1='n3c2=r4', cmd_2='n3c2=r6', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r17-n3-c4', square='34', cmd_1='n3c4=r1', cmd_2='n3c4=r7', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r15-n3-c5', square='35', cmd_1='n3c5=r1', cmd_2='n3c5=r5', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r57-n3-c7', square='37', cmd_1='n3c7=r5', cmd_2='n3c7=r7', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r48-n4-c4', square='44', cmd_1='n4c4=r4', cmd_2='n4c4=r8', count_1=51, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r23-n6-c2', square='62', cmd_1='n6c2=r2', cmd_2='n6c2=r3', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r38-n6-c7', square='67', cmd_1='n6c7=r3', cmd_2='n6c7=r8', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r28-n6-c9', square='69', cmd_1='n6c9=r2', cmd_2='n6c9=r8', count_1=50, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r28-n7-c5', square='75', cmd_1='n7c5=r2', cmd_2='n7c5=r8', count_1=49, count_2=72)
+DualForceType(is_Fail=True, case=1, df_cmd='ncr DF = r16-n9-c4', square='94', cmd_1='n9c4=r1', cmd_2='n9c4=r6', count_1=50, count_2=47)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r39-n9-c7', square='97', cmd_1='n9c7=r3', cmd_2='n9c7=r9', count_1=50, count_2=62)
+DualForceType(is_Fail=True, case=2, df_cmd='ncr DF = r49-n9-c8', square='98', cmd_1='n9c8=r4', cmd_2='n9c8=r9', count_1=47, count_2=69)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s25-b1-n1', square='11', cmd_1='b1n1=s2', cmd_2='b1n1=s5', count_1=47, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s58-b1-n6', square='16', cmd_1='b1n6=s5', cmd_2='b1n6=s8', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s12-b2-n3', square='23', cmd_1='b2n3=s1', cmd_2='b2n3=s2', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s56-b2-n7', square='27', cmd_1='b2n7=s5', cmd_2='b2n7=s6', count_1=49, count_2=64)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s67-b3-n6', square='36', cmd_1='b3n6=s6', cmd_2='b3n6=s7', count_1=50, count_2=63)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s67-b3-n9', square='39', cmd_1='b3n9=s6', cmd_2='b3n9=s7', count_1=63, count_2=50)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s28-b4-n2', square='42', cmd_1='b4n2=s2', cmd_2='b4n2=s8', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s28-b4-n3', square='43', cmd_1='b4n3=s2', cmd_2='b4n3=s8', count_1=71, count_2=81)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s59-b5-n3', square='53', cmd_1='b5n3=s5', cmd_2='b5n3=s9', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s13-b5-n4', square='54', cmd_1='b5n4=s1', cmd_2='b5n4=s3', count_1=51, count_2=71)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s13-b5-n7', square='57', cmd_1='b5n7=s1', cmd_2='b5n7=s3', count_1=71, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s78-b5-n9', square='59', cmd_1='b5n9=s7', cmd_2='b5n9=s8', count_1=47, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s48-b6-n1', square='61', cmd_1='b6n1=s4', cmd_2='b6n1=s8', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s34-b6-n3', square='63', cmd_1='b6n3=s3', cmd_2='b6n3=s4', count_1=81, count_2=71)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s23-b6-n9', square='69', cmd_1='b6n9=s2', cmd_2='b6n9=s3', count_1=47, count_2=70)
+DualForceType(is_Fail=True, case=1, df_cmd='bns DF = s56-b9-n2', square='92', cmd_1='b9n2=s5', cmd_2='b9n2=s6', count_1=73, count_2=51)
+DualForceType(is_Fail=True, case=2, df_cmd='bns DF = s46-b9-n6', square='96', cmd_1='b9n6=s4', cmd_2='b9n6=s6', count_1=50, count_2=64)
+
+1751 - tired stopping - major refactor ref:  solve_dual_force.py vs the test backup
+
+
+  2021-06-17-Thu------------------------------------------------
+
+solve_dual_force.py  line 87
+
+DualForceType(is_Fail=False, case=1, df_cmd='rcn DF = n23-r4-c2', square='42',
+cmd_1='r4c2=n2', cmd_2='r1c1=n0', count_1=81, count_2=0)
+
+  2021-06-18-Fri------------------------------------------------
+  1003
+
+

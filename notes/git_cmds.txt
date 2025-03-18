@@ -1,0 +1,26 @@
+git_cmds.txt  2021-05-07 Fri
+
+from:
+    git_notes.txt  2021-05-07 Fri
+    /home/Big/Dropbox/root/private/computer/software/git/git_notes.txt
+
+
+13. Summary of git commands so far:
+        1. >git --version
+
+        2. >git config --global user.name "<name>"
+           >git config --global user.email "<email>"
+
+        3. >git help <verb>
+
+        5. >git init
+
+        6. >git status
+
+        8. >git add -A,  >git add <file>
+
+       10. >git reset <file>,  >git reset
+
+       11. >git commit -m "<message>"
+
+       12. >git log

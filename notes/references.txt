@@ -1,0 +1,15 @@
+2021-05-05 Wed
+
+
+
+
+''''
+Corey Schafer Sep 12, 2019
+Python Threading Tutorial: Run Code Concurrently
+  Using the Threading Module
+
+15:25  importing concurrent futures
+
+CS 16-mins in
+
+'''

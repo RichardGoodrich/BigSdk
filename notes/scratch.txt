@@ -1,0 +1,30 @@
+
+
+not solved = 0
+yes solved = 1
+
+cell_2  cell_1
+--------------
+0       0          no_cells_solved
+0       1          cell_1_solved
+1       0          cell_2_solved
+1       1          both_cells_solved
+
+
+no_cells_solved()
+------------------
+if cell == cell_1:
+    if cell_2 != cell
+       ....
+elif cell != cell_1:
+    if cell_1 == cell_2
+
+
+
+
+cell_2 = cell
+
+
+
+
+

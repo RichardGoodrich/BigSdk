@@ -1,0 +1,292 @@
+
+
+/home/Big/Dropbox/root/private/computer/software/PyCharm/Big'sSudoku/Rev-3
+support.py at bottom in '''  '''  block.
+
+
+
+''''
+A functional ordering
+
+def convert_bsrc(value):
+def deconstruct_cmd(cmd):
+def form_cmd(G, S, O, V):
+def grid_name(cmd):
+def grid_name_from_cmd(cmd):
+def pause(inp=': '):
+
+
+is_grid_cmd_msg = False
+IS_DF = False
+IS_DF_FAIL = False
+IS_LOG_METHOD = False
+IS_RESIZEABLE = False
+
+STEP_MODE_MODES = [
+    'every_step',
+    'major_step',
+    'no_step',
+]
+
+STEP_MODE_NAMES = [
+    'Every Step',
+    'Major Step',
+    'No Step',
+]
+
+
+BASIC_CMD_LENGTH = 7
+DIGITS = '123456789'
+MAX_CELLS = 81
+MAX_DIGITS = len(DIGITS)
+PAD = 2
+ZERO = '0'
+
+ADD = '+'
+BP = 0
+EQUAL = '='
+EMPTY = P  # ZERO | P
+SET = '='
+CLR = '-'
+LINK = ' + '
+INFER = ' > '
+P = '.'
+PS = '. '
+CS = ', '
+SP = ' '
+NL = '\n'
+
+BigNumberTag = "BN"
+BigSquareTag = "BS"
+SmallNumberTag = "SN"
+SmallSquareTag = "SS"
+
+VALID_GRID_ENTRIES = DIGITS + P + ZERO
+
+CELL_GIVEN_MARK = '='
+CELL_SOLVE_MARK = '+'
+
+
+RCN = 'rcn'
+RNC = 'rnc'
+NCR = 'ncr'
+BNS = 'bns'
+
+CRN = 'crn'
+NRC = 'nrc'
+NBS = 'nbs'
+CNR = 'cnr'
+
+GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
+GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
+GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+
+GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
+GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
+GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+
+COLOR_BKG = 'yellow'
+COLOR_CLR = 'red'
+COLOR_SET = 'green'
+
+
+COLORS_LOAD_REMOVES = ['orange', 'cyan', 'red']
+COLOR_PAIR_1 = ['maroon1', 'orchid1']
+COLOR_PAIR_2 = ['DodgerBlue2', 'cyan']
+COLOR_ASSERT = 'green'
+COLOR_REMOVE = 'red'
+
+COLOR_TRANSPARENT = ''
+COLOR_BACKGROUND = 'white'
+
+COLOR_HIGHLIGHT = 'yellow'
+
+COLOR_BUTTON_FOCUS = 'yellow'
+COLOR_BUTTON_NO_FOCUS = COLOR_BACKGROUND
+
+COLOR_NUMBER_ENTERED = 'blue'
+COLOR_NUMBER_PUZZLE  = 'black'
+
+COLOR_OUTLINE_DISABLED = COLOR_BACKGROUND
+COLOR_OUTLINE_ENABLED = 'cyan'
+
+
+PUZZLE_DEFAULT =\
+'.....627........5....54..311.....5..97.8.2.64..6.....764..29....8........526.....'
+
+
+LINEAR    list of ints from 0 to 80  length = 81
+COLS      9 lists of lists of length 9   squares for the Rows
+ROWS      9 lists of lists of length 9   squares for the Rows
+SQUARES   list  of length 81  '11' to '99'
+
+
+BLK_SQR_ROWS = ['123', '456', '789']
+BLK_SQR_COLS = ['147', '258', '369']
+
+BLK_TO_COLS     # = dict length 9    # also ROW_T0_SQRS
+BLK_TO_ROWS     # = dict length 9    # also ROW_TO_BLKS
+COL_TO_BLKS     # = dict length 9
+COL_TO_SQRS     # = dict length 9
+ROW_TO_BLKS     # = BLK_TO_ROWS
+ROW_TO_SQRS     # = BLK_TO_COLS
+
+------ dictionariesw
+
+BNS_DICT   keys are 0 and SQUARES
+NCR_DICT   keys are 0 and SQUARES
+RCN_DICT   keys are 0 and SQUARES
+RNC_DICT   keys are 0 and SQUARES
+
+
+LINEAR_TO_ROWCOL  lenghth=81  keys ar ints, values = SQUARES
+ROWCOL_TO_LINEAR   keys are in SQUARES  retruns int
+
+BLK_COL_ROWS   keys = 'bBcC  of lists of len=3  length = 81
+BLK_ROW_COLS = keys = 'bBrR  of lists of len=3  length = 81
+
+
+COL_TO_BLOCKS    for keys in DIGITS
+ROW_TO_BLOCKS    for keys in DIGITS
+
+COL_PEERS_U      for keys in SQUARES
+ROW_PEERS_U      for keys in SQUARES
+ROWCOL_PEERS_U   for keys in SQUARES
+
+BLK_ONLY_PEERS_U  # todo not done yet - needs expanded to be all of a block?
+BLK_PEERS_U      for keys in SQUARES
+
+ALL_PEERS__U     for keys in SQUARES
+
+ALL_PEERS = OrderedDict(ALL_PEERS_U)
+BLK_PEERS = OrderedDict(BLK_PEERS_U)
+COL_PEERS = OrderedDict(COL_PEERS_U)
+ROW_PEERS = OrderedDict(ROW_PEERS_U)
+ROWCOL_PEERS = OrderedDict(ROWCOL_PEERS_U)
+
+
+# --------  alphabetical order ---------------------------------------------------------------
+
+ADD = '+'
+ALL_PEERS__U     for keys in SQUARES
+ALL_PEERS = OrderedDict(ALL_PEERS_U)
+
+BASIC_CMD_LENGTH = 7
+BigNumberTag = "BN"
+BigSquareTag = "BS"
+
+BLK_ONLY_PEERS_U   # todo not done yet - needs expanded to be all of a block?
+BLK_SQR_ROWS       = ['123', '456', '789']
+BLK_SQR_COLS       = ['147', '258', '369']
+BLK_TO_COLS        # = dict length 9    # also ROW_T0_SQRS
+BLK_TO_ROWS        # = dict length 9    # also ROW_TO_BLKS
+BLK_COL_ROWS        keys = 'bBcC  of lists of len=3  length = 81
+BLK_PEERS           = OrderedDict(BLK_PEERS_U)
+BLK_PEERS_U         for keys in SQUARES
+BLK_ROW_COLS        keys = 'bBrR  of lists of len=3  length = 81
+
+BNS = 'bns'
+BNS_DICT            keys are 0 and SQUARES
+BP = 0
+
+CELL_GIVEN_MARK = '='
+CELL_SOLVE_MARK = '+'
+CLR = '-'
+CNR = 'cnr'
+
+COL_PEERS       = OrderedDict(COL_PEERS_U)
+COL_PEERS_U      for keys in SQUARES
+COL_TO_BLKS     # = dict length 9
+COL_TO_BLOCKS   for keys in DIGITS
+COL_TO_SQRS     # = dict length 9
+
+COLOR_ASSERT = 'green'
+COLOR_BACKGROUND = 'white'
+COLOR_BKG = 'yellow'
+COLOR_BUTTON_FOCUS = 'yellow'
+COLOR_BUTTON_NO_FOCUS = COLOR_BACKGROUND
+COLOR_CLR = 'red'
+COLOR_HIGHLIGHT = 'yellow'
+COLOR_PAIR_1 = ['maroon1', 'orchid1']
+COLOR_PAIR_2 = ['DodgerBlue2', 'cyan']
+COLOR_REMOVE = 'red'
+COLOR_SET = 'green'
+COLOR_NUMBER_ENTERED = 'blue'
+COLOR_NUMBER_PUZZLE  = 'black'
+COLOR_OUTLINE_DISABLED = COLOR_BACKGROUND
+COLOR_OUTLINE_ENABLED = 'cyan'
+COLOR_TRANSPARENT = ''
+COLORS_LOAD_REMOVES = ['orange', 'cyan', 'red']
+
+COLS           9 lists of lists of length 9   squares for the Rows
+CRN = 'crn'
+CS = ', '
+
+def convert_bsrc(value):
+def deconstruct_cmd(cmd):
+def form_cmd(G, S, O, V):
+def grid_name(cmd):
+def grid_name_from_cmd(cmd):
+def pause(inp=': '):
+DIGITS = '123456789'
+
+EMPTY = P  # ZERO | P
+EQUAL = '='
+
+GRID_NAMES = GRID_NAMES_1 + GRID_NAMES_2
+GRID_NAMES_1 = [RCN, RNC, NCR, BNS]
+GRID_NAMES_2 = [CRN, NRC, CNR, NBS]
+
+INFER = ' > '
+IS_DF = False
+IS_DF_FAIL = False
+is_grid_cmd_msg = False
+IS_LOG_METHOD = False
+IS_RESIZEABLE = False
+
+LINEAR             list of ints from 0 to 80  length = 81
+LINEAR_TO_ROWCOL   lenghth=81  keys ar ints, values = SQUARES
+LINK = ' + '
+
+MAX_CELLS = 81
+MAX_DIGITS = len(DIGITS)
+
+NBS = 'nbs'
+NCR = 'ncr'
+NCR_DICT   keys are 0 and SQUARES
+NL = '\n'
+NRC = 'nrc'
+
+P = '.'
+PAD = 2
+PS = '. '
+PUZZLE_DEFAULT =\
+'.....627........5....54..311.....5..97.8.2.64..6.....764..29....8........526.....'
+
+RCN = 'rcn'
+RCN_DICT          keys are 0 and SQUARES
+RNC = 'rnc'
+RNC_DICT          keys are 0 and SQUARES
+
+ROW_PEERS          = OrderedDict(ROW_PEERS_U)
+ROW_PEERS_U       for keys in SQUARES
+ROW_TO_BLKS     # = BLK_TO_ROWS
+ROW_TO_BLOCKS      for keys in DIGITS
+ROW_TO_SQRS     # = BLK_TO_COLS
+ROWCOL_PEERS       = OrderedDict(ROWCOL_PEERS_U)
+ROWCOL_PEERS_U     for keys in SQUARES
+ROWCOL_TO_LINEAR   keys are in SQUARES  retruns int
+ROWS               9 lists of lists of length 9   squares for the Rows
+
+SET = '='
+SmallNumberTag = "SN"
+SmallSquareTag = "SS"
+SP = ' '
+SQUARES   list  of length 81  '11' to '99'
+STEP_MODE_MODES = ['every_step', 'major_step', 'no_step',
+STEP_MODE_NAMES = [ 'Every Step', 'Major Step', 'No Step']
+
+VALID_GRID_ENTRIES = DIGITS + P + ZERO
+ZERO = '0'
+'''
+

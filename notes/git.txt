@@ -1,0 +1,288 @@
+git.txt  2021-05-05  Wed
+
+Refer to references: at end of this file. author = Corey
+
+
+1. Corey says learn command line (CL) version first.  And suggests you do following:
+
+    >git --version
+    git version 2.20.1
+    >
+
+2. Initial Config
+    >git config --global user.name "Richard Goodrich"
+    >git config --global user.email "richardgoodrich@gmail.com"
+    >git config --list
+    user.name=Richard Goodrich
+    user.email=richardgoodrich@gmail.com
+    >
+
+3. Help @ 0546
+     git help <verb>    OR
+     git <verb> --help
+
+     e.g. <verb> = config
+
+4.  Initialize Repository  0700
+    goto directory where want to set-up on git:
+
+
+    >pwd
+    /home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src
+    >ls -al
+    total 580
+    drwxr-xr-x 3 Big Big   4096 May  5 07:52 .
+    drwxr-xr-x 8 Big Big   4096 May  5 07:02 ..
+    -rw-r--r-- 1 Big Big   2781 May  4 11:54 board.py
+    -rw-r--r-- 1 Big Big   9506 May  4 10:10 cell_cmd.py
+    -rw-r--r-- 1 Big Big  10891 May  4 10:51 cmds.py
+    -rw-r--r-- 1 Big Big  13311 May  4 15:54 cmd_stuff.py
+    -rw-r--r-- 1 Big Big  17168 Apr 17 16:09 codec.py
+    -rw-r--r-- 1 Big Big    391 Apr 28 15:15 colors.py
+    -rw-r--r-- 1 Big Big 172942 Apr 17 16:09 dancing_links.py
+    -rw-r--r-- 1 Big Big 189562 Apr 21 18:01 draw.py
+    -rw-r--r-- 1 Big Big  19644 May  4 10:56 grid.py
+    -rw-r--r-- 1 Big Big   7386 May  5 07:40 main.py
+    -rw-r--r-- 1 Big Big   3689 May  4 10:54 puzzle_load.py
+    drwxr-xr-x 2 Big Big   4096 May  5 07:52 __pycache__
+    -rw-r--r-- 1 Big Big  59371 May  4 11:42 settings.py
+    -rw-r--r-- 1 Big Big   2384 May  4 15:23 signals.py
+    -rw-r--r-- 1 Big Big   2649 May  4 15:27 solve.py
+    -rw-r--r-- 1 Big Big   6092 May  4 15:39 solve_subsets.py
+    -rw-r--r-- 1 Big Big    195 May  5 07:19 support.py
+    -rw-r--r-- 1 Big Big  27903 Apr 17 17:45 utility.py
+    >
+
+
+    >git init
+    Initialized empty Git repository in /home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/.git/
+    >ls -al
+
+    total 584
+    drwxr-xr-x 4 Big Big   4096 May  5 08:29 .
+    drwxr-xr-x 8 Big Big   4096 May  5 07:02 ..
+    -rw-r--r-- 1 Big Big   2781 May  4 11:54 board.py
+    -rw-r--r-- 1 Big Big   9506 May  4 10:10 cell_cmd.py
+    -rw-r--r-- 1 Big Big  10891 May  4 10:51 cmds.py
+    -rw-r--r-- 1 Big Big  13311 May  4 15:54 cmd_stuff.py
+    -rw-r--r-- 1 Big Big  17168 Apr 17 16:09 codec.py
+    -rw-r--r-- 1 Big Big    391 Apr 28 15:15 colors.py
+    -rw-r--r-- 1 Big Big 172942 Apr 17 16:09 dancing_links.py
+    -rw-r--r-- 1 Big Big 189562 Apr 21 18:01 draw.py
+    drwxr-xr-x 7 Big Big   4096 May  5 08:29 .git
+    -rw-r--r-- 1 Big Big  19644 May  4 10:56 grid.py
+    -rw-r--r-- 1 Big Big   7386 May  5 07:40 main.py
+    -rw-r--r-- 1 Big Big   3689 May  4 10:54 puzzle_load.py
+    drwxr-xr-x 2 Big Big   4096 May  5 07:52 __pycache__
+    -rw-r--r-- 1 Big Big  59371 May  4 11:42 settings.py
+    -rw-r--r-- 1 Big Big   2384 May  4 15:23 signals.py
+    -rw-r--r-- 1 Big Big   2649 May  4 15:27 solve.py
+    -rw-r--r-- 1 Big Big   6092 May  4 15:39 solve_subsets.py
+    -rw-r--r-- 1 Big Big    195 May  5 07:19 support.py
+    -rw-r--r-- 1 Big Big  27903 Apr 17 17:45 utility.py
+    >
+
+    The .git directory tracks the code.  If delete ',git' directory then
+    git does not track project anymore.
+
+5.  Get Status before 1st commit 0830
+
+    >git status
+    On branch master
+
+    No commits yet
+
+    Untracked files:
+      (use "git add <file>..." to include in what will be committed)
+
+        <in red text>
+        __pycache__/
+        board.py
+        cell_cmd.py
+        cmd_stuff.py
+        cmds.py
+        codec.py
+        colors.py
+        dancing_links.py
+        draw.py
+        grid.py
+        main.py
+        puzzle_load.py
+        settings.py
+        signals.py
+        solve.py
+        solve_subsets.py
+        support.py
+        utility.py
+        </end of red text>
+
+    nothing added to commit but untracked files present (use "git add" to track)
+    >
+
+5.  Create '.gitignore'  file  0930
+
+    >touch .gitignore
+    >ls .git*
+    .gitignore
+
+    .git:
+    branches  config  description  HEAD  hooks  info  objects  refs
+    >
+
+    I put following in .gitignore:
+    __pycache__
+    *.pyc
+
+    >git status
+    On branch master
+
+    No commits yet
+
+    Untracked files:
+      (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        board.py
+        cell_cmd.py
+        cmd_stuff.py
+        cmds.py
+        codec.py
+        colors.py
+        dancing_links.py
+        draw.py
+        grid.py
+        main.py
+        puzzle_load.py
+        settings.py
+        signals.py
+        solve.py
+        solve_subsets.py
+        support.py
+        utility.py
+
+    nothing added to commit but untracked files present (use "git add" to track)
+    >
+
+    Note '__pycache__/' is not there anymore.  The '.gitignore' is there and we want it there.
+
+5.  Where are we now  file  1050
+    Corey shows a graphic
+
+    Working Directory
+    Staging Area           where we organize what we want committed
+    .git Repository
+
+   You want to 'stage' first so you can choose what you want committed.
+   You want detailed message on what was committed and why.
+
+5.  Adding files to staging area  1200
+
+   To add all files: (can add specific files with: >git add <file>
+
+    >git add -A
+    >
+
+    >git status
+    On branch master
+
+    No commits yet
+
+    Changes to be committed:
+      (use "git rm --cached <file>..." to unstage)
+
+        <text in green>
+        new file:   .gitignore
+        new file:   board.py
+        new file:   cell_cmd.py
+        new file:   cmd_stuff.py
+        new file:   cmds.py
+        new file:   codec.py
+        new file:   colors.py
+        new file:   dancing_links.py
+        new file:   draw.py
+        new file:   grid.py
+        new file:   main.py
+        new file:   puzzle_load.py
+        new file:   settings.py
+        new file:   signals.py
+        new file:   solve.py
+        new file:   solve_subsets.py
+        new file:   support.py
+        new file:   utility.py
+        </text in green>
+
+    >
+
+5.  Commit Files  1250
+
+    but first:  >git reset <file>  can remove specific files from staging area
+    >git reset    by itself removes all files from staging area
+
+
+    >git commit -m "Initial Commit - Loading Default Puzzle and Solving Singles works"
+
+    >git commit -m "Initial Commit - Loading Default Puzzle and Solving Singles works"
+    [master (root-commit) 393f2dc] Initial Commit - Loading Default Puzzle and Solving Singles works
+     18 files changed, 11755 insertions(+)
+     create mode 100644 .gitignore
+     create mode 100644 board.py
+     create mode 100644 cell_cmd.py
+     create mode 100644 cmd_stuff.py
+     create mode 100644 cmds.py
+     create mode 100644 codec.py
+     create mode 100644 colors.py
+     create mode 100644 dancing_links.py
+     create mode 100644 draw.py
+     create mode 100644 grid.py
+     create mode 100644 main.py
+     create mode 100644 puzzle_load.py
+     create mode 100644 settings.py
+     create mode 100644 signals.py
+     create mode 100644 solve.py
+     create mode 100644 solve_subsets.py
+     create mode 100644 support.py
+     create mode 100644 utility.py
+    >
+
+    >git status
+    On branch master
+    nothing to commit, working tree clean
+    >
+
+    @ 1432
+    >git log
+    commit 393f2dc39e93697e196d6ff2c23bc3bb5a0c7bc2 (HEAD -> master)
+    Author: Richard Goodrich <richardgoodrich@gmail.com>
+    Date:   Wed May 5 09:07:51 2021 -0700
+
+        Initial Commit - Loading Default Puzzle and Solving Singles works
+    >
+
+5.  Stopped at 1500
+
+
+
+
+
+
+
+
+
+
+
+references:
+  [01] Git Tutorial for Beginners: Command-Line Fundamentals  30:32
+       Aug 3, 2015
+       YouTube Channel:  Corey Schafer
+       link: https://youtu.be/HVsySz-h9r4
+
+       start at 0400 for details of using git
+
+       Corey references Pro Git Book
+       by:  Scott Chacon and Ben Straub
+       from Git Web site under docs
+
+       https://git-scm.com/
+       https://git-scm.com/doc/ Pro Git
+       from Amazon:  $44.70
+

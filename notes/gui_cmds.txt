@@ -1,0 +1,72 @@
+gui_cmds.txt   2021-05-27-Thu   (in support.py imported as s)
+
+class GuiCmdType:              class ColorCmd:             class EntryCmd:
+    cmd: str = 'cmd'               name: str = 'color'         name: str = 'entry'
+    entry: str = 'entry'           index: int = 9              entry: str = ''
+    color: str = 'color'           color: str = ''
+    display: str = 'display'       tsg: str = ''
+    lift: str = 'lift'
+    restore: str = 'restore'
+    wait: str = 'wait'
+
+class LiftCmd:                class GridCmd:                entry_cmd = EntryCmd()
+    name: str = 'lift'            name: str = 'cmd'         lift_cmd = LiftCmd()
+    index: int = 9                index: int = 9            grid_cmd = GridCmd()
+                                  square: str = ''          color_cmd = ColorCmd()
+                                  cell: str = ''
+
+gui_cmd_type = GuiCmdType()
+gui_cmd_name = gui_cmd_type.*   * = 'cmd' | 'entry' | 'color' | 'display' | 'lift' | 'restore' | 'wait'
+
+def cmd_to_gui():
+    try:
+        name = s.gui_cmd_name
+        cmd_types = s.GuiCmdType()
+
+        if name == cmd_types.cmd:                          s.gui_cmd_name = s.gui_cmd_type.color
+            index = s.grid_cmd.index                       s.grid_cmd.index = grid_index
+            square = s.grid_cmd.square                     s.grid_cmd.square = square
+            cell = s.grid_cmd.cell                         s.grid_cmd.cell = cell
+                                                           cb()
+            grid = grid_list[index]
+            grid.cmd(square, cell)
+            return
+
+        elif name == cmd_types.color:                      s.gui_cmd_name = s.gui_cmd_type.color
+            index = s.color_cmd.index                      s.color_cmd.index = grid_index
+            color = s.color_cmd.color                      s.color_cmd.color = colors.highlight
+            tag = s.color_cmd.tag                          s.color_cmd.tag = tag
+                                                           cb()
+            grid = grid_list[index]
+            grid.color_square(tag, color)
+            return
+
+        elif name == cmd_types.entry:                     s.gui_cmd_name = s.gui_cmd_type.entry
+            value = s.entry_cmd.entry                     s.entry_cmd.entry = sigs.big_cmd
+            entry_var.set(value)                          cb()
+            return
+
+        elif name == cmd_types.display:                  s.gui_cmd_name = s.gui_cmd_type.display
+            for grid in grid_list:                       cb()
+                grid.display_numbers()
+            return
+
+        elif name == cmd_types.lift:                     s.gui_cmd_name = s.gui_cmd_type.lift
+            toggle_color_normal()                        lift_cmd.index = grid_index
+            sigs.is_lifted_index = s.lift_cmd.index      cb()
+
+            grid_list[sigs.is_lifted_index].canvas["bg"] = colors.lift_color_active
+            grid_list[sigs.is_lifted_index].canvas.update()
+            grid_list[sigs.is_lifted_index].master.lift()
+            return
+
+        elif name == cmd_types.restore:                  s.gui_cmd_name = s.gui_cmd_type.restore
+            for grid in grid_list:                       cb()
+                grid.color_restore()
+            return
+
+        elif name == cmd_types.wait:                     s.gui_cmd_name = s.gui_cmd_type.restore
+            root.wait_variable(next_button_var)          cb()
+            next_button_var.set(False)
+            menuBar['bg'] = colors.MENU_BAR_ACTIVE
+            return

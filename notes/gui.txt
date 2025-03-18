@@ -1,0 +1,51 @@
+BigSdk  2021-05-06  Thu
+
+main.py line 199
+
+    def cmd_to_gui(**kwargs):
+        '''
+        The only way for business logic to send commands to gui
+
+        :param kwargs:
+        :return:
+        '''
+        try:
+            cmd = sigs.GuiCmd.cmd
+
+            if cmd == sigs.gui_cmd.wait:
+                root.wait_variable(next_button_var)
+                next_button_var.set(False)
+                menuBar['bg'] = colors.MENU_BAR_ACTIVE
+                return
+
+            elif cmd == sigs.gui_cmd.color:
+                index = sigs.GuiCmd.grid_index
+                grid = grid_list[index]
+                color = sigs.GuiCmd.color
+                tag = sigs.GuiCmd.tag
+                grid.color_square(tag, color)
+                return
+
+            elif cmd == sigs.gui_cmd.restoreColors:
+                for grid in grid_list:
+                    grid.color_restore()
+                return
+
+            elif cmd == sigs.gui_cmd.displayNumbers:
+                for grid in grid_list:
+                    grid.display_numbers()
+                return
+
+            elif cmd == sigs.gui_cmd.grid:
+                index = sigs.GuiCmd.grid_index
+                grid = grid_list[index]
+                square = sigs.GuiCmd.square
+                cell = sigs.GuiCmd.cell
+                grid.cmd(square, cell)
+                return
+
+        except Exception as e:
+            logger_except.exception(e)
+            sys.exit()
+
+    cb = cmd_to_gui   # cb for call back

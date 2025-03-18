@@ -1,0 +1,38 @@
+2021-06-07 15:56:50,804  :ERROR  :display_numbers  :459  :invalid command name ".!toplevel2.!resizingcanvas"
+Traceback (most recent call last):
+  File "/home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/grid.py", line 448, in display_numbers
+    self.canvas.itemconfig('BN_' + s,
+  File "/home/Big/anaconda3/lib/python3.8/tkinter/__init__.py", line 2898, in itemconfigure
+    return self._configure(('itemconfigure', tagOrId), cnf, kw)
+  File "/home/Big/anaconda3/lib/python3.8/tkinter/__init__.py", line 1627, in _configure
+    self.tk.call(_flatten((self._w, cmd)) + self._options(cnf))
+_tkinter.TclError: invalid command name ".!toplevel2.!resizingcanvas"
+2021-06-07 17:58:35,983  :ERROR  :do  :158  :sort() missing 1 required positional argument: 'df_lst'
+Traceback (most recent call last):
+  File "/home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/solve_dual_force.py", line 153, in do
+    sort()
+TypeError: sort() missing 1 required positional argument: 'df_lst'
+2021-06-08 17:05:05,845  :ERROR  :display_numbers  :459  :invalid command name ".!toplevel2.!resizingcanvas"
+Traceback (most recent call last):
+  File "/home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/grid.py", line 448, in display_numbers
+    self.canvas.itemconfig('BN_' + s,
+  File "/home/Big/anaconda3/lib/python3.8/tkinter/__init__.py", line 2898, in itemconfigure
+    return self._configure(('itemconfigure', tagOrId), cnf, kw)
+  File "/home/Big/anaconda3/lib/python3.8/tkinter/__init__.py", line 1627, in _configure
+    self.tk.call(_flatten((self._w, cmd)) + self._options(cnf))
+_tkinter.TclError: invalid command name ".!toplevel2.!resizingcanvas"
+2021-06-17 15:16:34,824  :ERROR  :can_do_cmd  :572  :cmds.can_do_cmd(), cant set all grids
+Traceback (most recent call last):
+  File "/home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/cmds.py", line 556, in can_do_cmd
+    raise Exception(f'cmds.can_do_cmd(), cant set all grids')  # -----> Fail!
+Exception: cmds.can_do_cmd(), cant set all grids
+2021-06-17 16:29:13,627  :ERROR  :color_df_pair  :314  :'int' object is not iterable
+Traceback (most recent call last):
+  File "/home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/solve_dual_force.py", line 298, in color_df_pair
+    for grid_index in NUMBER_OF_GRIDS:
+TypeError: 'int' object is not iterable
+2021-06-18 13:36:19,686  :ERROR  :color_solve_all  :292  :name 'cell' is not defined
+Traceback (most recent call last):
+  File "/home/Big/Dropbox/root/private/computer/software/PyCharm/BigSdk/src/solve_dual_force.py", line 287, in color_solve_all
+    print(f'index = {i}, square = {sqr}, cell = {cell}')
+NameError: name 'cell' is not defined

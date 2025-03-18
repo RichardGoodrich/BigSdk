@@ -1,0 +1,41 @@
+BigSdk  cmd_fails.txt
+
+in cmds.py
+
+313  basic_cmd(cb, from_cmd)           can_do_cmd()  set all
+329  basic_cmd(cb, from_cmd)           basic_cmd_removals(cb, cmd_list)
+
+373  basic_cmd_removals(cb, cmd_list)  cmd_expansion(cb, peer_list)
+376  basic_cmd_removals(cb, cmd_list)  block_only_removals(cb)
+
+390  cmd_expansion(cb, peer_removals)   rcn_row_expansion(cb, row_block_peers)
+392  cmd_expansion(cb, peer_removals)   rcn_col_expansion(cb, col_block_peers)
+410  cmd_expansion(cb, peer_removals)   from can_do_cmd(cmdx)
+
+450  rcn_row_expansion(cb, row_block)   can_do_cmd(cmdx)
+
+485  rcn_col_expansion(cb, col_block)   can_do_cmd(cmdx)
+
+521  block_only_removals(cb)            can_do_cmd(sub)
+
+551  can_do_cmd(basic_cmd)   can't set all ---------------> line 313 only
+558  can_do_cmd(basic_cmd)   can't remove last digit
+
+==============================================================================
+calls 058  cell_cmd.base_cmd(cb, basic_cmd)
+              cmds.py  325,350,356,412,452,487,523
+
+      325  basic_cmd(cb, from_cmd)
+
+      350  basic_cmd_grid(cb, from_cmd)
+      356  basic_cmd_grid(cb, from_cmd)
+
+      412  cmd_expansion(cb, peer_removals)
+
+      452  rcn_row_expansion(cb, row_block)
+
+      487  rcn_col_expansion(cb, col_block)
+
+      523  block_only_removals(cb)
+
+      raise Exception(<msg>)

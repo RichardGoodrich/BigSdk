@@ -1,0 +1,28 @@
+root.txt  2021-05-05 Wed
+
+(ref path at end of file)
+
+
+base:
+/home/Big/Dropbox/root/private/computer/software/PyCharm
+
+root:
+base/BigSdk
+
+docs:
+root/docs    for official docs done in asciidoctor
+
+logs:
+root/logs
+
+notes:
+root/notes
+
+src:
+root/src
+
+
+path for this file:
+-------------------------------------------------
+/home/Big/Dropbox/root/private/computer/software
+/PyCharm/BigSdk/notes/root.txt
